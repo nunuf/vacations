@@ -1,0 +1,8 @@
+.AddVacation > form {
+  margin: 30px;
+  text-align: center;
+}
+.AddVacation img {
+  position: relative;
+  left: 3vw;
+}

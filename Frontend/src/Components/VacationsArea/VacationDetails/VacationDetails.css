@@ -1,0 +1,8 @@
+.VacationDetails > img {
+	width: 400px;
+}
+
+.VacationDetails > p {
+  font-size: 16px;
+	font-weight: bold;
+}

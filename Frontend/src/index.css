@@ -1,0 +1,164 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: black;
+  font-family: MagicTripFont;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  overflow-x: hidden;
+}
+
+@font-face {
+  src: url('./Assets/Fonts/OriginalSurfer-Regular.ttf');
+  font-family: MagicTripFont;
+}
+
+a {
+  color: indigo;
+}
+
+form {
+  width: 20vw;
+  text-align: center;
+}
+
+ form > .TextBox {
+  width: 100%;
+  margin: 5px 0;
+}
+
+.Box {
+  display: inline-block;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+  background-image: linear-gradient(90deg, gray, white);
+  border-radius: 10px;
+}
+
+.Error {
+  color: red;
+  margin: 0 20px;
+  position: absolute;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px magenta; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(45deg, violet, indigo, red); 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-image: linear-gradient(45deg, red, indigo, violet);
+}
+
+.Sky0 {
+  background: #00000c;
+}
+
+.Sky1 {
+  background: linear-gradient(to bottom, #020111 85%, #191621 100%);
+}
+
+.Sky2 {
+  background: linear-gradient(to bottom, #020111 60%, #20202c 100%);
+}
+
+.Sky3 {
+  background: linear-gradient(to bottom, #020111 10%, #3a3a52 100%);
+}
+
+.Sky4 {
+  background: linear-gradient(to bottom, #20202c 0%, #515175 100%);
+}
+
+.Sky5 {
+  background: linear-gradient(to bottom, #40405c 0%, #6f71aa 80%, #8a76ab 100%);
+}
+
+.Sky6 {
+  background: linear-gradient(to bottom, #387ffb 0%, #34c4ff 40%, #ffc6d0 75%, #ffceaa 95%);
+}
+
+.Sky7 {
+  background: linear-gradient(to bottom, #387ffb 0%, #34c4ff 60%, #eab0d1 100%);
+}
+
+.Sky8 {
+  background: linear-gradient(to bottom, #387ffb 0%, #34c4ff 100%);
+}
+
+.Sky9 {
+  background: linear-gradient(to bottom, #94c5f8 1%, #387ffb 70%, #34c4ff 100%);
+}
+
+.Sky10 {
+  background: linear-gradient(to bottom, #b7eaff 0%, #34c4ff 100%);
+}
+
+.Sky11 {
+  background: linear-gradient(to bottom, #9be2fe 0%, #67d1fb 100%);
+}
+
+.Sky12 {
+  background: linear-gradient(to bottom, #90dffe 0%, #38a3d1 100%);
+}
+
+.Sky13 {
+  background: linear-gradient(to bottom, #57c1eb 0%, #246fa8 100%);
+}
+
+.Sky14 {
+  background: linear-gradient(to bottom, #2d91c2 0%, #1e528e 100%);
+}
+
+.Sky15 {
+  background: linear-gradient(to bottom, #2473ab 0%, #1e528e 70%, #5b7983 100%);
+}
+
+.Sky16 {
+  background: linear-gradient(to bottom, #1e528e 0%, #265889 50%, #9da671 100%);
+}
+
+.Sky17 {
+  background: linear-gradient(to bottom, #1e528e 0%, #728a7c 50%, #e9ce5d 100%);
+}
+
+.Sky18 {
+  background: linear-gradient(to bottom, #154277 0%, #576e71 30%, #e44b8d 75%, #a53e76 95%);
+}
+
+.Sky19 {
+  background: linear-gradient(to bottom, #3751e0 0%, #4F4F47 75%, #7f3667 100%);
+}
+
+.Sky20 {
+  background: linear-gradient(to bottom, #071B26 0%, #111425 75%, #3751e0 100%);
+}
+
+.Sky21 {
+  background: linear-gradient(to bottom, #010A10 85%, #40405c 100%);
+}
+
+.Sky22 {
+  background: linear-gradient(to bottom, #090401 90%, #40405c 100%);
+}
+
+.Sky23 {
+  background: linear-gradient(to bottom, #00000c 80%, #150800 100%);
+}

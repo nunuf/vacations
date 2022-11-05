@@ -1,0 +1,11 @@
+.VacationList > a {
+  position: absolute;
+  top: 120px;
+  right: 20px;
+  font-weight: 900;
+  text-decoration: none;
+  background-image: linear-gradient(to left, violet, indigo, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 7vh;
+}
