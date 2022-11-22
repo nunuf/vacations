@@ -1,35 +1,25 @@
-import fsPromises from 'fs/promises';
-import UserModel from '../4-models/user-model';
-import VacationModel from '../4-models/vacation-model';
+import mysql from 'mysql';
+import appConfig from './app-config';
 
-const vacationsFilePath = './src/1-assets/json/vacation.json';
-const usersFilePath = './src/1-assets/json/user.json';
+const connection = mysql.createPool({
+  host: appConfig.host,
+  user: appConfig.user,
+  password: appConfig.password,
+  database: appConfig.database
+});
 
-const getAllVacations = async (): Promise<VacationModel[]> => {
-  const content = await fsPromises.readFile(vacationsFilePath, "utf-8");
-  const vacations = JSON.parse(content);
-  return vacations;
-};
-
-const saveAllVacations = async (vacations: VacationModel[]): Promise<void> => {
-  const content = JSON.stringify(vacations, null, 4);
-  await fsPromises.writeFile(vacationsFilePath, content);
-};
-
-const getAllUsers = async (): Promise<UserModel[]> => {
-  const content = await fsPromises.readFile(usersFilePath, "utf-8");
-  const vacations = JSON.parse(content);
-  return vacations;
-};
-
-const saveAllUsers = async (users: UserModel[]): Promise<void> => {
-  const content = JSON.stringify(users, null, 4);
-  await fsPromises.writeFile(usersFilePath, content);
-};
+function execute(sql: string, values?: any[]): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
+  });
+}
 
 export default {
-  getAllVacations,
-  saveAllVacations,
-  getAllUsers,
-  saveAllUsers
-}
+  execute
+};

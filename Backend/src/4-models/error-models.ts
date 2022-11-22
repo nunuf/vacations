@@ -1,27 +1,27 @@
-export class ErrorModel {
+export class ClientError {
   public constructor(public message: string, public status: number) {}
 }
 
-export class RouteNotFoundErrorModel extends ErrorModel {
+export class RouteNotFoundError extends ClientError {
   public constructor(route: string) {
-    super(`Route ${route} not exist`, 404);
+      super(`Route ${route} not exist`, 404);
   }
 }
 
-export class ResourceNotFoundErrorModel extends ErrorModel {
+export class ResourceNotFoundError extends ClientError {
   public constructor(id: string) {
-    super(`Id ${id} not exist`, 404);
+      super(`Id ${id} not exist`, 404);
   }
 }
 
-export class ValidationErrorModel extends ErrorModel {
+export class ValidationError extends ClientError {
   public constructor(message: string) {
-    super(message, 400);
+      super(message, 400);
   }
 }
 
-export class UnauthorizedErrorModel extends ErrorModel {
+export class UnauthorizedError extends ClientError {
   public constructor(message: string) {
-    super(message, 401);
+      super(message, 401);
   }
 }

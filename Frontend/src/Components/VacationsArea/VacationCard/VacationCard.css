@@ -1,17 +1,47 @@
 .VacationCard {
-  width: 300px;
-  height: 300px;
-  font-size: large;
+  width: 292px;
+  height: 236px;
+  font-size: medium;
+  font-weight: bold;
 }
 
-.VacationCard img {
-  width: 200px;
-  height: 150px;
+.VacationCard img,
+.VacationCard .Border {
+  width: 150px;
+  height: 120px;
   border: 1px solid white;
   border-radius: 50%;
+  margin-top: 5px;
+}
+
+.VacationCard .Border {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border: 2px solid white;
+  color: transparent;
+  z-index: 1;
 }
 
 .VacationCard > .Card {
   position: relative;
-  top: 10%;
+}
+
+.VacationCard .Destination {
+  font-size: large;
+  position: absolute;
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px 0;
+  text-align: center;
+  background-image: linear-gradient(90deg, gray, white);
+  border-radius: 10px;
+}
+
+.VacationCard .Description {
+  white-space: nowrap;
+  font-size: medium;
+  font-weight: bold;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }

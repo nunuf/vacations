@@ -1,93 +1,198 @@
-import fs from 'fs';
+import { OkPacket } from 'mysql';
 import { v4 as uuid } from 'uuid';
 import dal from '../2-utils/dal';
-import { ResourceNotFoundErrorModel, ValidationErrorModel } from '../4-models/error-models';
+import imageHandler from '../2-utils/imageHandler';
+import { ResourceNotFoundError, ValidationError } from '../4-models/error-models';
 import VacationModel from '../4-models/vacation-model';
 
 // Get all vacations
-const getAllVacations = async (): Promise<VacationModel[]> => {
-  // Get all vacations from JSON file
-  const vacations = await dal.getAllVacations();
-  // Return all vacations
+const getAllVacations = async (userId: string): Promise<VacationModel[]> => {
+
+  let vacations: VacationModel[] = [];
+
+  if (userId) {
+    // Query
+    const sql = `
+      SELECT DISTINCT
+        v.vacationId AS id,
+        v.destination,
+        v.description,
+        v.startDate,
+        v.endDate,
+        v.price,
+        v.imageName,
+        EXISTS(SELECT * FROM followers WHERE vacationId = v.vacationId AND userId = ?) AS isFollowing,
+        COUNT(f.userId) AS followersCount
+      FROM vacations AS v LEFT JOIN followers AS f
+      ON v.vacationId = f.vacationId
+      GROUP BY v.vacationId
+      ORDER BY startDate DESC
+    `;
+
+    // Execute
+    vacations = await dal.execute(sql, [userId]);
+  }
+
+  // Return
   return vacations;
+
 };
 
 // Get one vacation
-const getOneVacation = async (id: string): Promise<VacationModel> => {
-  // Get all vacations from JSON file
-  const vacations = await dal.getAllVacations();
-  // Find desired vacation
-  const vacation = vacations.find(c => c.id === id);
-  if (!vacation) throw new ResourceNotFoundErrorModel(id);
+const getOneVacation = async (id: string, userId: string): Promise<VacationModel> => {
+
+  let vacation: VacationModel = null;
+
+  if (userId) {
+    // Query
+    const sql = `
+        SELECT DISTINCT
+        v.vacationId AS id,
+        v.destination,
+        v.description,
+        v.startDate,
+        v.endDate,
+        v.price,
+        v.imageName,
+        EXISTS(SELECT * FROM followers WHERE vacationId = v.vacationId AND userId = ?) AS isFollowing,
+        COUNT(f.userId) AS followersCount
+      FROM vacations AS v LEFT JOIN followers AS f
+      ON v.vacationId = f.vacationId
+      WHERE v.vacationId = ?
+      GROUP BY v.vacationId
+      ORDER BY startDate DESC
+    `;
+
+    // Execute
+    const vacations: VacationModel[] = await dal.execute(sql, [userId, id]);
+
+    // Extract first (and only) vacation
+    vacation = vacations[0];
+
+    // If not exist
+    if (!vacation) { throw new ResourceNotFoundError(id); }
+  }
+
+  // Return
   return vacation;
+
 };
 
 // Add new vacation
 const addVacation = async (vacation: VacationModel): Promise<VacationModel> => {
+
   // Validation
   const errors = vacation.validate();
-  if (errors) throw new ValidationErrorModel(errors);
+  if (errors) { throw new ValidationError(errors); }
 
-  // Save image to disk if exists
-  if (vacation.image) {
-    const extension = vacation.image.name.substring(vacation.image.name.lastIndexOf('.'));
-    vacation.imageName = uuid() + extension;
-    await vacation.image.mv('./src/1-assets/images/' + vacation.imageName);
-    delete vacation.image;
-  }
+  // Save image to disk
+  imageHandler.saveImage(vacation);
+  // Don't save image in the database
+  delete vacation.image;
 
-  const vacations = await dal.getAllVacations();
-  // Generate new id
+  // Set id
   vacation.id = uuid();
-  // Add vacation to array
-  vacations.push(vacation);
-  // Save back all vacation to JSON file
-  await dal.saveAllVacations(vacations);
+
+  // Query
+  const sql = `
+    INSERT INTO vacations
+    VALUES(?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  // Execute
+  await dal.execute(sql, [
+    vacation.id,
+    vacation.destination,
+    vacation.description,
+    vacation.startDate,
+    vacation.endDate,
+    vacation.price,
+    vacation.imageName
+  ]);
+
   // Return added vacation
   return vacation;
 };
 
 // Update existing vacation
 const updateVacation = async (vacation: VacationModel): Promise<VacationModel> => {
+
   // Validation
   const errors = vacation.validate();
-  if (errors) throw new ValidationErrorModel(errors);
+  if (errors) throw new ValidationError(errors);
 
-  const vacations = await dal.getAllVacations();
-  const index = vacations.findIndex(c => c.id === vacation.id);
-  if (index === -1) throw new ResourceNotFoundErrorModel(vacation.id);
-  // Save image to disk if exists
+  // Query
+  const sql = `
+    UPDATE vacations SET
+      destination = ?,
+      description = ?, 
+      startDate = ?,
+      endDate = ?,
+      price = ?,
+      imageName = ?
+    WHERE vacationId = ?
+  `;
+
+  // Execute
+  const info: OkPacket = await dal.execute(sql, [
+    vacation.destination,
+    vacation.description,
+    vacation.startDate,
+    vacation.endDate,
+    vacation.price,
+    vacation.imageName,
+    vacation.id
+  ]);
+   
+  // Save image to disk if new image was uploaded
   if (vacation.image) {
-    // If we have a previous image
-    if (fs.existsSync('./src/1-assets/images/' + vacations[index].imageName)) {
-      // Delete it
-      fs.unlinkSync('./src/1-assets/images/' + vacations[index].imageName);
-    }
-    const extension = vacation.image.name.substring(vacation.image.name.lastIndexOf('.'));
-    vacation.imageName = uuid() + extension;
-    await vacation.image.mv('./src/1-assets/images/' + vacation.imageName);
+    // Delete current image
+    imageHandler.deleteImage(vacation);
+    // Save new image to disk
+    imageHandler.saveImage(vacation);
+    // Don't save new image in the database
     delete vacation.image;
   }
-  // Update found vacation
-  vacations[index] = vacation;
-  // Save back all vacations to JSON file
-  await dal.saveAllVacations(vacations);
+  
+  // If not exist
+  if (info.affectedRows === 0) { throw new ResourceNotFoundError(vacation.id); }
+
+  // Return updated vacation
   return vacation;
+
 };
 
 // Delete one vacation
 const deleteVacation = async (id: string): Promise<void> => {
-  const vacations = await dal.getAllVacations();
-  const index = vacations.findIndex(c => c.id === id);
-  if (index === -1) throw new ResourceNotFoundErrorModel(id);
-  // If we have a previous image
-  if (fs.existsSync('./src/1-assets/images/' + vacations[index].imageName)) {
-    // Delete it
-    fs.unlinkSync('./src/1-assets/images/' + vacations[index].imageName);
-  }
-  // Delete desired vacation from array
-  vacations.splice(index, 1);
-  await dal.saveAllVacations(vacations);
+
+  // Query SELECT vacation to delete
+  const selectSql = `
+    SELECT *
+    FROM vacations
+    WHERE vacationId = ?
+  `;
+
+  // Execute
+  const vacations = await dal.execute(selectSql, [id]);
+
+  // Extract first (and only) vacation
+  const vacation: VacationModel = vacations[0];
+
+  // If not exist
+  if (!vacation) { throw new ResourceNotFoundError(id); }
+
+  // Delete image from disk
+  imageHandler.deleteImage(vacation);
+
+  // Query DELETE vacation
+  const deleteSql = `
+    DELETE FROM vacations
+    WHERE vacationId = ?
+  `;
+
+  // Execute
+  await dal.execute(deleteSql, [id]);
+
 };
 
 export default {

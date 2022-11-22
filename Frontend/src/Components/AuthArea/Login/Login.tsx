@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Clear, Send } from '@mui/icons-material';
 import { Button, ButtonGroup, TextField } from '@mui/material';
 import CredentialsModel from '../../../Models/CredentialsModel';
@@ -34,12 +34,14 @@ const Login: React.FC = (): JSX.Element => {
         <TextField label="Username" variant="outlined" className="TextBox" {...register("username")} />
         <TextField label="Password" variant="outlined" type="password" className="TextBox" {...register("password")} />
 
-        <ButtonGroup variant="contained" fullWidth>
+        <ButtonGroup variant="contained" fullWidth className="Buttons">
           <Button color="primary" type="submit" startIcon={<Send />}>Send</Button>
           <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
         </ButtonGroup>
 
       </form>
+      
+      <NavLink to="/register">Register</NavLink>
 
     </div>
   );

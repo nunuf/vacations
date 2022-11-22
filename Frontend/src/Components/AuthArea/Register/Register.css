@@ -1,3 +1,7 @@
-.Register {
-	
+.Register > form {
+  margin: 30px;
+}
+
+.Register .Buttons {
+  margin-top: 15px;
 }

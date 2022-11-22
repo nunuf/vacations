@@ -1,33 +1,37 @@
 class VacationModel {
-  public id: number;
+  public id: string;
   public description: string;
   public destination: string;
-  public fromDate: Date;
-  public toDate: Date;
+  public startDate: Date;
+  public endDate: Date;
   public price: number;
   public imageName: string;
   public image: FileList;
-  public subscribers: number;
+  public isFollowing: number;
+  public followersCount: number;
 
   public static descriptionValidation = {
     required: {value: true, message: 'Missing description'},
-    minLength: {value: 10, message: 'Description too short'},
-    maxLength: {value: 1000, message: 'Description too long'},
+    minLength: {value: 5, message: 'Description too short'},
+    maxLength: {value: 500, message: 'Description too long'},
   }
   public static destinationValidation = {
     required: {value: true, message: 'Missing destination'},
     minLength: {value: 2, message: 'Destination too short'},
     maxLength: {value: 100, message: 'Destination too long'},
   }
-  public static fromDateValidation = {
-    required: {value: true, message: 'Missing from date'}
+  public static startDateValidation = {
+    required: {value: true, message: 'Missing start date'}
   }
-  public static toDateValidation = {
-    required: {value: true, message: 'Missing to date'}
+  public static endDateValidation = {
+    required: {value: true, message: 'Missing end date'}
   }
   public static priceValidation = {
     required: {value: true, message: 'Missing destination'},
     pattern: {value: /^[0-9]+$/i, message: 'Price invalid'}
+  }
+  public static imageValidation = {
+    required: {value: true, message: 'Missing image'}
   }
 }
 

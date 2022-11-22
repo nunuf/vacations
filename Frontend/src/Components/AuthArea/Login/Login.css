@@ -1,9 +1,7 @@
 .Login > form {
   margin: 30px;
-  text-align: center;
 }
 
-.Login .TextBox {
-  width: 100%;
-  margin: 10px 0;
+.Login .Buttons {
+  margin-top: 15px;
 }

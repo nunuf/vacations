@@ -11,10 +11,10 @@ function useVerifyLoggedIn() {
 
   useEffect(() => {
 
-    // If we don't heave a token:
+    // If we don't heave a token
     if (!authStore.getState().token) {
-      notifyService.error("You are not logged in!");
-      navigate("/login");
+      notifyService.error('You are not logged in!');
+      navigate('/login');
     }
 
   }, []);

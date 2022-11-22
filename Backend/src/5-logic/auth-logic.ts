@@ -1,64 +1,99 @@
 import { v4 as uuid } from 'uuid';
-import cyber from '../2-utils/cyber';
 import dal from '../2-utils/dal';
-import CredentialsModel from '../4-models/credentials-model';
-import { UnauthorizedErrorModel, ValidationErrorModel } from '../4-models/error-models';
-import RoleModel from '../4-models/role-model';
+import cyber from '../2-utils/cyber';
+import { UnauthorizedError, ValidationError } from '../4-models/error-models';
 import UserModel from '../4-models/user-model';
+import CredentialsModel from '../4-models/credentials-model';
+import RoleModel from '../4-models/role-model';
 
 const register = async (user: UserModel): Promise<string> => {
   // Validation
-  const err = user.validate();
-  if (err) throw new ValidationErrorModel(err);
+  const error = user.validate();
+  if (error) throw new ValidationError(error);
+  if (await isUsernameTaken(user.username)) throw new ValidationError(`Username ${user.username} already taken`);
 
-  // need to delete this after learning DB <<-------------<<--------<<----------
-  const users = await dal.getAllUsers();
-
-  // If username is taken
-  if (users.some(u => u.username === user.username)) {
-    throw new ValidationErrorModel('Username already taken');
-  }
+  // Hash password
+  user.password = cyber.hash(user.password);
 
   // Set id
   user.id = uuid();
-
-  // Define new user as a User role
+  // Set role
   user.role = RoleModel.User;
 
-  // Add new user to collection
-  users.push(user);
+  // Query
+  const sql = `
+    INSERT INTO users
+    VALUES(?, ?, ?, ?, ?, ?)
+  `;
 
-  // Save user back to file
-  await dal.saveAllUsers(users);
+  // Execute
+  await dal.execute(sql, [
+    user.id,
+    user.firstName,
+    user.lastName,
+    user.username,
+    user.password,
+    user.role
+  ]);
 
   // Generate token
-  delete user.password;
   const token = cyber.getNewToken(user);
 
   return token;
 };
 
-const logIn = async (credentials: CredentialsModel): Promise<string> => {
+const login = async (credentials: CredentialsModel): Promise<string> => {
   // Validation
-  const err = credentials.validate();
-  if (err) throw new ValidationErrorModel(err);
+  const error = credentials.validate();
+  if (error) throw new ValidationError(error);
 
-  // --------->>---->> Need to delete this after learning DB <<-------------<<--------<<----------
-  const users = await dal.getAllUsers();
+  // Hash password
+  credentials.password = cyber.hash(credentials.password);
 
-  // Get user by credentials
-  const user = users.find(u => u.username === credentials.username && u.password === credentials.password);
+  // Query
+  const sql = `
+    SELECT
+      userId AS id,
+      firstName,
+      lastName,
+      username,
+      password,
+      roleId AS role
+    FROM users
+    WHERE username = ? AND password = ?
+  `;
+
+  // Execute
+  const users = await dal.execute(sql, [credentials.username, credentials.password]);
 
   // If user not exists
-  if (!user) throw new UnauthorizedErrorModel('Incorrect username or password');
+  if (users.length === 0) throw new UnauthorizedError('Incorrect username or password');
+
+  // Extract first (and only) user
+  const user = users[0];
 
   // Generate token
   const token = cyber.getNewToken(user);
 
   return token;
+};
+
+const isUsernameTaken = async (username: string): Promise<boolean> => {
+  // Query
+  const sql = `
+    SELECT COUNT(*)
+    FROM users
+    WHERE username = ?
+  `;
+
+  // Execute
+  const count = await dal.execute(sql, [username])[0];
+
+  // Check if already exist
+  return count > 0;
 };
 
 export default {
-  register, 
-  logIn
+  register,
+  login
 }

@@ -1,10 +1,21 @@
 import { NextFunction, Request, Response } from 'express';
+import appConfig from '../2-utils/app-config';
 import logger from '../2-utils/logger';
 
 const catchAll = (err: any, request: Request, response: Response, next: NextFunction) => {
-  console.error(err);
-  logger('error', err.message);
-  response.status(err.status).send(err.message);
+  console.log(err);
+
+  const status = err.status || 500;
+
+  // Always log server errors
+  if (status === 500) {
+    logger('error', 'catchAll()', err);
+  }
+
+  // Return original error only on development
+  const message = appConfig.isDevelopment ? err.message : "Some error occurred, please try again";
+
+  response.status(status).send(message);
 };
 
 export default catchAll;

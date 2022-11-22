@@ -1,37 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import UserModel from '../../../Models/UserModel';
-import { authStore } from '../../../Redux/AuthState';
+import useUser from '../../../Utils/useUser';
 
 import './AuthMenu.css';
 
 const AuthMenu: React.FC = (): JSX.Element => {
 
-  const [user, setUser] = useState<UserModel>();
-
-  useEffect(() => {
-
-    setUser(authStore.getState().user);
-
-    const unsubscribe = authStore.subscribe(() => {
-      setUser(authStore.getState().user);
-    });
-
-    return () => unsubscribe();
-
-  }, []);
+  const user = useUser();
 
   return (
     <div className="AuthMenu">
-      {
-        !user &&
-        <>
-          <span>Hello Guest | </span>
-          <NavLink to="/login">Login</NavLink>
-          <span> | </span>
-          <NavLink to="/register">Register</NavLink>
-        </>
-      }
+      {!user && <span>Hello Guest</span>}
       {
         user &&
         <>

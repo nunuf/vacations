@@ -1,8 +1,19 @@
-.VacationDetails > img {
-	width: 400px;
+.VacationDetails {
+  background-image: linear-gradient(to left, violet, indigo, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .VacationDetails > p {
   font-size: 16px;
 	font-weight: bold;
+}
+
+.VacationDetails > img {
+	width: 400px;
+  border-radius: 10px;
+}
+
+.VacationDetails .Back {
+  z-index: 5;
 }

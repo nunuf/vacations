@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Send, Clear } from '@mui/icons-material';
 import { Button, ButtonGroup, TextField } from '@mui/material';
 import UserModel from '../../../Models/UserModel';
@@ -29,17 +29,22 @@ const Register: React.FC = (): JSX.Element => {
     <div className="Register Box">
 
       <form onSubmit={handleSubmit(send)}>
+
         <h2>Register</h2>
 
         <TextField label="First name" variant="outlined" className="TextBox" {...register("firstName")} />
         <TextField label="Last name" variant="outlined" className="TextBox" {...register("lastName")} />
         <TextField label="Username" variant="outlined" className="TextBox" {...register("username")} />
         <TextField label="Password" variant="outlined" type="password" className="TextBox" {...register("password")} />
-        <ButtonGroup variant="contained" fullWidth>
+
+        <ButtonGroup variant="contained" fullWidth className="Buttons">
           <Button color="primary" type="submit" startIcon={<Send />}>Register</Button>
           <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
         </ButtonGroup>
+        
       </form>
+      
+      <NavLink to="/login">Login</NavLink>
 
     </div>
   );

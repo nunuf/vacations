@@ -2,12 +2,6 @@ import { Notyf } from 'notyf';
 
 class NotifyService {
 
-  private notify = new Notyf({
-    duration: 3000, // display duration
-    position: { x: "center", y: "top" }, // message location
-    dismissible: true // can user click on X
-  });
-
   public success(message: string): void {
     this.notify.success(message);
   }
@@ -16,6 +10,12 @@ class NotifyService {
     const message = this.extractErrorMessage(err);
     this.notify.error(message);
   }
+  
+  private notify = new Notyf({
+    duration: 3000, // display duration
+    position: { x: "center", y: "top" }, // message location
+    dismissible: true // can user click on X
+  });
 
   private extractErrorMessage(err: any): string {
 

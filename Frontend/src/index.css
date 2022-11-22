@@ -22,7 +22,7 @@ a {
 
 form {
   width: 20vw;
-  text-align: center;
+  margin: 0 30px 10px 30px;
 }
 
  form > .TextBox {
@@ -34,15 +34,16 @@ form {
   display: inline-block;
   border: 1px solid black;
   margin: 5px;
-  padding: 5px;
   background-image: linear-gradient(90deg, gray, white);
   border-radius: 10px;
+  overflow: auto;
+  color: black;
+  z-index: 5;
 }
 
-.Error {
-  color: red;
-  margin: 0 20px;
-  position: absolute;
+.Title {
+  font-size: 6vh;
+  font-weight: bold;
 }
 
 /* width */
@@ -69,26 +70,32 @@ form {
 
 .Sky0 {
   background: #00000c;
+  color: white;
 }
 
 .Sky1 {
   background: linear-gradient(to bottom, #020111 85%, #191621 100%);
+  color: white;
 }
 
 .Sky2 {
   background: linear-gradient(to bottom, #020111 60%, #20202c 100%);
+  color: white;
 }
 
 .Sky3 {
   background: linear-gradient(to bottom, #020111 10%, #3a3a52 100%);
+  color: white;
 }
 
 .Sky4 {
   background: linear-gradient(to bottom, #20202c 0%, #515175 100%);
+  color: white;
 }
 
 .Sky5 {
   background: linear-gradient(to bottom, #40405c 0%, #6f71aa 80%, #8a76ab 100%);
+  color: white;
 }
 
 .Sky6 {
@@ -149,16 +156,20 @@ form {
 
 .Sky20 {
   background: linear-gradient(to bottom, #071B26 0%, #111425 75%, #3751e0 100%);
+  color: white;
 }
 
 .Sky21 {
   background: linear-gradient(to bottom, #010A10 85%, #40405c 100%);
+  color: white;
 }
 
 .Sky22 {
   background: linear-gradient(to bottom, #090401 90%, #40405c 100%);
+  color: white;
 }
 
 .Sky23 {
   background: linear-gradient(to bottom, #00000c 80%, #150800 100%);
+  color: white;
 }

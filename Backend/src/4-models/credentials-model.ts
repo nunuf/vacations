@@ -10,7 +10,7 @@ class CredentialsModel {
   }
 
   public static validationSchema = Joi.object({
-    username: Joi.string().required().min(4).max(20),
+    username: Joi.string().required().min(2).max(20),
     password: Joi.string().required().min(4).max(20)
   });
 
@@ -20,4 +20,4 @@ class CredentialsModel {
   }
 }
 
-export default  CredentialsModel;
+export default CredentialsModel;

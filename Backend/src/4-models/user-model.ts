@@ -19,10 +19,10 @@ class UserModel {
   }
 
   public static validationSchema = Joi.object({
-    id: Joi.string().optional(),
+    id: Joi.string().optional().uuid(),
     firstName: Joi.string().required().min(2).max(20),
     lastName: Joi.string().required().min(2).max(20),
-    username: Joi.string().required().min(4).max(20),
+    username: Joi.string().required().min(2).max(20),
     password: Joi.string().required().min(4).max(20),
     role: Joi.forbidden()
   });
