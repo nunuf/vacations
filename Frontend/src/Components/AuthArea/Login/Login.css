@@ -5,3 +5,9 @@
 .Login .Buttons {
   margin-top: 15px;
 }
+
+.Login > a {
+  position: relative;
+  bottom: 15px;
+  z-index: 5;
+}

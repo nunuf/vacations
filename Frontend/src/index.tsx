@@ -7,7 +7,7 @@ import interceptorsService from './Services/InterceptorsService';
 
 import './index.css';
 
-// Create all interceptors once: 
+// Create all interceptors once
 interceptorsService.createInterceptors();
 
 const root = ReactDOM.createRoot(

@@ -4,8 +4,8 @@ import { authStore } from '../Redux/AuthState';
 
 // Custom Hook
 
-function useUser(): UserModel {
-
+const useUser = (): UserModel => {
+ 
   const [user, setUser] = useState<UserModel>();
 
   useEffect(() => {
@@ -19,8 +19,8 @@ function useUser(): UserModel {
     return () => unsubscribe();
     
   }, []);
-
+ 
   return user;
-}
+};
 
 export default useUser;

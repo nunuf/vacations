@@ -1,7 +1,7 @@
-.VacationList > a {
+.VacationList > .AdminButtons {
   position: absolute;
   top: 80px;
-  right: 20px;
+  left: 20px;
   font-weight: 900;
   text-decoration: none;
   background-image: linear-gradient(to left, violet, indigo, red);
@@ -9,4 +9,16 @@
   -webkit-text-fill-color: transparent;
   font-size: 7vh;
   z-index: 5;
+}
+
+.VacationList > .Checkbox {
+  position: absolute;
+  color: #d500f9;
+  top: 80px;
+  left: 20px;
+  z-index: 5;
+}
+
+.css-19micn4-MuiButtonBase-root-MuiPaginationItem-root {
+  color: white !important;
 }

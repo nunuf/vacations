@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { Undo } from '@mui/icons-material';
 import noImage from '../../../Assets/Images/no-image.png';
 import VacationModel from '../../../Models/VacationModel';
 import notifyService from '../../../Services/NotifyService';
@@ -41,7 +41,7 @@ const VacationDetails: React.FC = (): JSX.Element => {
           }
           <br />
           <br />
-          <NavLink to="/vacations" className="Back">Back</NavLink>
+          <NavLink to="/vacations" className="Back"><Undo /> Back</NavLink>
         </>
       }
     </div>

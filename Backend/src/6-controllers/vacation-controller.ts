@@ -18,6 +18,16 @@ router.get('/vacations', async (request: Request, response: Response, next: Next
   }
 });
 
+router.get('/vacations-by-user', async (request: Request, response: Response, next: NextFunction) => {
+  try {
+    const userId = await cyber.verifyUser(request);
+    const vacations = await vacationLogic.getUserVacations(userId);
+    response.json(vacations);
+  } catch (err: any) {
+    next(err);
+  }
+});
+
 router.get('/vacations/:id', async (request: Request, response: Response, next: NextFunction) => {
   try {
     const userId = await cyber.verifyUser(request);

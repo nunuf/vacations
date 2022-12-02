@@ -1,5 +1,6 @@
 import axios from 'axios';
 import FollowerModel from '../Models/FollowerModel';
+import { VacationsActionType, vacationsStore } from '../Redux/VacationsState';
 import appConfig from '../Utils/Config';
 
 class FollowersService {
@@ -14,7 +15,7 @@ class FollowersService {
     const addedFollower = response.data;
 
     // Add the added follower to the global state
-    // followersStore.dispatch({ type: FollowersActionType.AddFollower, payload: addedFollower });
+    vacationsStore.dispatch({ type: VacationsActionType.AddFollower, payload: addedFollower });
 
   }
 
@@ -25,7 +26,7 @@ class FollowersService {
     await axios.delete<void>(`${appConfig.followersUrl}${vacationId}/${userId}`);
 
     // Delete in global state
-    // followersStore.dispatch({ type: FollowersActionType.DeleteFollower, payload: vacationId });
+    vacationsStore.dispatch({ type: VacationsActionType.DeleteFollower, payload: vacationId });
 
   }
   

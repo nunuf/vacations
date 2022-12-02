@@ -3,6 +3,7 @@ import Login from '../../AuthArea/Login/Login';
 import Logout from '../../AuthArea/Logout/Logout';
 import Register from '../../AuthArea/Register/Register';
 import AddVacation from '../../VacationsArea/AddVacation/AddVacation';
+import Chart from '../../VacationsArea/Chart/Chart';
 import EditVacation from '../../VacationsArea/EditVacation/EditVacation';
 import VacationDetails from '../../VacationsArea/VacationDetails/VacationDetails';
 import VacationList from '../../VacationsArea/VacationList/VacationList';
@@ -24,19 +25,22 @@ const Routing: React.FC = (): JSX.Element => {
         {/* Logout */}
         <Route path="/logout" element={<Logout />} />
 
-        {/* Vacation List: */}
+        {/* Vacation List */}
         <Route path="/vacations" element={<VacationList />} />
 
-        {/* Vacation Details: */}
+        {/* Vacation Details */}
         <Route path="/vacations/details/:vacationId" element={<VacationDetails />} />
 
-        {/* Add Vacation: */}
+        {/* Add Vacation */}
         <Route path="/vacations/new" element={<AddVacation />} />
 
-        {/* Edit Vacation: */}
+        {/* Edit Vacation */}
         <Route path="/vacations/edit/:vacationId" element={<EditVacation />} />
 
-        {/* Default Route: */}
+        {/* Chart */}
+        <Route path="/vacations/chart" element={<Chart />} />
+
+        {/* Default Route */}
         <Route path="/" element={<Navigate to="/vacations" />} />
 
         <Route path="*" element={<PageNotFound />} />

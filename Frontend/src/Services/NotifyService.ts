@@ -25,13 +25,13 @@ class NotifyService {
     // Back: throws string (500 - server crash / 401 - unauthorized / 404...)
     if (typeof err.response?.data === "string") return err.response.data;
 
-    // Back throws string[] (400 - validation)
+    // Back: throws string[] (400 - validation)
     if (Array.isArray(err.response?.data)) return err.response.data[0];
 
     // Front: throw new Error("some error...");
     if (typeof err.message === "string") return err.message;
 
-    // Other: 
+    // Other
     return "Some error occurred, please try again";
   }
 

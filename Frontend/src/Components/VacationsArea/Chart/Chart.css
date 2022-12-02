@@ -1,0 +1,10 @@
+.Chart {
+	position: absolute;
+  top: 50%;
+  transform: translate(30%, -40%);
+  width: 60%;
+  background-image: linear-gradient(to left, violet, indigo, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 5;
+}

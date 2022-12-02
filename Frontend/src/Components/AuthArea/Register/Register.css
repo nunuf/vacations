@@ -5,3 +5,9 @@
 .Register .Buttons {
   margin-top: 15px;
 }
+
+.Register > a {
+  position: relative;
+  bottom: 20px;
+  z-index: 5;
+}

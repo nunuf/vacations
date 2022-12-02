@@ -30,24 +30,24 @@ const AddVacation: React.FC = (): JSX.Element => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  function onSelectFile(e: BaseSyntheticEvent) {
+  const onSelectFile = (e: BaseSyntheticEvent) => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
       return;
     }
     setSelectedFile(e.target.files[0]);
-  }
+  };
 
-  async function send(vacation: VacationModel) {
+  const send = async (vacation: VacationModel) => {
     try {
       await vacationsService.addVacation(vacation);
-      notifyService.success("Vacation has been successfully added");
-      navigate("/vacations");
+      notifyService.success('Vacation has been successfully added');
+      navigate('/vacations');
     }
     catch (err: any) {
       notifyService.error(err);
     }
-  }
+  };
 
   return (
     <div className="AddVacation Box">
@@ -77,21 +77,23 @@ const AddVacation: React.FC = (): JSX.Element => {
         <TextField
           type="date"
           variant="outlined" 
-          label="From Date"
+          label="Start Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
           error={formState.errors.startDate?.message !== undefined}
           helperText={formState.errors.startDate?.message}
+          InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
           {...register('startDate', VacationModel.startDateValidation)}
         />
         <TextField
           type="date"
           variant="outlined"
-          label="To Date"
+          label="End Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
           error={formState.errors.endDate?.message !== undefined}
           helperText={formState.errors.endDate?.message}
+          InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
           {...register('endDate', VacationModel.endDateValidation)} 
         />
         <TextField

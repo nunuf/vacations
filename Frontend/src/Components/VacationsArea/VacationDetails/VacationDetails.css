@@ -1,7 +1,11 @@
 .VacationDetails {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
   background-image: linear-gradient(to left, violet, indigo, red);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  z-index: 5;
 }
 
 .VacationDetails > p {
@@ -11,9 +15,6 @@
 
 .VacationDetails > img {
 	width: 400px;
+  height: 300px;
   border-radius: 10px;
-}
-
-.VacationDetails .Back {
-  z-index: 5;
 }

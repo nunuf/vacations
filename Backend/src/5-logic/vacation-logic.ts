@@ -21,7 +21,7 @@ const getAllVacations = async (userId: string): Promise<VacationModel[]> => {
         v.endDate,
         v.price,
         v.imageName,
-        EXISTS(SELECT * FROM followers WHERE vacationId = v.vacationId AND userId = ?) AS isFollowing,
+        EXISTS(SELECT * FROM followers WHERE vacationId = f.vacationId AND userId = ?) AS isFollowing,
         COUNT(f.userId) AS followersCount
       FROM vacations AS v LEFT JOIN followers AS f
       ON v.vacationId = f.vacationId
@@ -31,6 +31,40 @@ const getAllVacations = async (userId: string): Promise<VacationModel[]> => {
 
     // Execute
     vacations = await dal.execute(sql, [userId]);
+  }
+
+  // Return
+  return vacations;
+
+};
+
+// Get all vacations by user
+const getUserVacations = async (userId: string): Promise<VacationModel[]> => {
+
+  let vacations: VacationModel[] = [];
+
+  if (userId) {
+    // Query
+    const sql = `
+      SELECT DISTINCT
+        v.vacationId AS id,
+        v.destination,
+        v.description,
+        v.startDate,
+        v.endDate,
+        v.price,
+        v.imageName,
+        EXISTS(SELECT * FROM followers WHERE vacationId = f.vacationId AND userId = ?) AS isFollowing,
+        COUNT(f.userId) AS followersCount
+      FROM vacations AS v LEFT JOIN followers AS f
+      ON v.vacationId = f.vacationId
+      WHERE f.userId = ?
+      GROUP BY v.vacationId
+      ORDER BY startDate DESC
+    `;
+
+    // Execute
+    vacations = await dal.execute(sql, [userId, userId]);
   }
 
   // Return
@@ -54,7 +88,7 @@ const getOneVacation = async (id: string, userId: string): Promise<VacationModel
         v.endDate,
         v.price,
         v.imageName,
-        EXISTS(SELECT * FROM followers WHERE vacationId = v.vacationId AND userId = ?) AS isFollowing,
+        EXISTS(SELECT * FROM followers WHERE vacationId = f.vacationId AND userId = ?) AS isFollowing,
         COUNT(f.userId) AS followersCount
       FROM vacations AS v LEFT JOIN followers AS f
       ON v.vacationId = f.vacationId
@@ -143,7 +177,7 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
     vacation.imageName,
     vacation.id
   ]);
-   
+
   // Save image to disk if new image was uploaded
   if (vacation.image) {
     // Delete current image
@@ -153,7 +187,7 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
     // Don't save new image in the database
     delete vacation.image;
   }
-  
+
   // If not exist
   if (info.affectedRows === 0) { throw new ResourceNotFoundError(vacation.id); }
 
@@ -197,6 +231,7 @@ const deleteVacation = async (id: string): Promise<void> => {
 
 export default {
   getAllVacations,
+  getUserVacations,
   getOneVacation,
   addVacation,
   updateVacation,

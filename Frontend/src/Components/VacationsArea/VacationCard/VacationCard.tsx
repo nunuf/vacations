@@ -15,9 +15,10 @@ import './VacationCard.css';
 
 interface VacationCardProps {
   vacation: VacationModel;
+  deleteFollower: () => void;
 }
 
-const VacationCard: React.FC<VacationCardProps> = ({ vacation }): JSX.Element => {
+const VacationCard: React.FC<VacationCardProps> = ({ vacation, deleteFollower }): JSX.Element => {
 
   const navigate = useNavigate();
   const user = useUser();
@@ -29,13 +30,19 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation }): JSX.Element =>
   }, [user]);
 
   const followVacation = async (event: ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      await followersService.addFollower({ vacationId: vacation.id, userId: user.id });
-    } else {
-      await followersService.deleteFollower(vacation.id, user.id);
+    try {
+      const isChecked = event.target.checked;
+      if (isChecked) {
+        await followersService.addFollower({ vacationId: vacation.id, userId: user.id });
+      } else {
+        await followersService.deleteFollower(vacation.id, user.id);
+        deleteFollower();
+      }
+      setChecked(isChecked);
     }
-    setChecked(isChecked);
+    catch (err: any) {
+      notifyService.error(err);
+    }
   };
 
   const deleteVacation = async (id: string) => {
@@ -82,7 +89,7 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation }): JSX.Element =>
           {vacation.followersCount}
           {
             isAdmin ?
-            <Checkbox disabled color="secondary" icon={<FavoriteBorder />} checkedIcon={<Favorite />} /> :
+            <Checkbox disabled color="secondary" icon={<FavoriteBorder />} checkedIcon={<Favorite />} checked={checked} /> :
             <Checkbox color="secondary" icon={<FavoriteBorder />} checkedIcon={<Favorite />} checked={checked} onChange={followVacation} />
           }
           {

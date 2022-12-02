@@ -10,7 +10,7 @@ export class AuthState {
 
   public constructor() {
 
-    // Take token from session storage, restore if exists:
+    // Take token from session storage, restore if exists
     this.token = sessionStorage.getItem('token');
     if (this.token) {
       const container: { user: UserModel } = jwtDecode(this.token);
@@ -30,16 +30,16 @@ export enum AuthActionType {
 // 3. Auth Action
 export interface AuthAction {
   type: AuthActionType;
-  payload?: string; // string because of the token, optional because logout needs no payload.
+  payload?: string; // string because of the token, optional because logout needs no payload
 }
 
 // 4. Auth Reducer
 export function authReducer(currentState = new AuthState(), action: AuthAction): AuthState {
 
-  // Duplicate current state: 
+  // Duplicate current state
   const newState = { ...currentState };
 
-  // Perform the needed operation: 
+  // Perform the needed operation
   switch (action.type) {
 
     case AuthActionType.Register:
@@ -57,7 +57,7 @@ export function authReducer(currentState = new AuthState(), action: AuthAction):
       break;
   }
 
-  // Return the new state: 
+  // Return the new state
   return newState;
 }
 

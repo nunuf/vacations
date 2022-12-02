@@ -100,21 +100,23 @@ const EditVacation: React.FC = (): JSX.Element => {
         <TextField
           type="date"
           variant="outlined" 
-          label="From Date"
+          label="Start Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
           error={formState.errors.startDate?.message !== undefined}
           helperText={formState.errors.startDate?.message}
+          InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
           {...register('startDate')}
         />
         <TextField
           type="date"
           variant="outlined"
-          label="To Date"
+          label="End Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
           error={formState.errors.endDate?.message !== undefined}
           helperText={formState.errors.endDate?.message}
+          InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
           {...register('endDate')}
         />
         <TextField

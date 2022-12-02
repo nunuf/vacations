@@ -12,16 +12,18 @@ class VacationsService {
     // Take vacations from global store
     let vacations = vacationsStore.getState().vacations;
 
+    // If we don't have this vacations in global state
     if (vacations.length === 0) {
 
       // AJAX Request
-      const response = await axios.get<VacationModel[]>(appConfig.vacationsUrl); // AJAX
+      const response = await axios.get<VacationModel[]>(appConfig.vacationsUrl);
 
       // Extract vacations
       vacations = response.data;
 
       // Save vacations to global state
       vacationsStore.dispatch({ type: VacationsActionType.FetchVacations, payload: vacations });
+
     }
 
     // Return vacations
@@ -29,6 +31,31 @@ class VacationsService {
 
   }
 
+  // Get all vacations by user
+  public async getUserVacations(): Promise<VacationModel[]> {
+
+    // Take vacations from global store
+    let vacations = vacationsStore.getState().vacations;
+
+    // Find user's vacations
+    let userVacations = vacations.filter(v => v.isFollowing === 1);
+
+    // If we don't have this vacations in global state
+    if (userVacations.length === 0) {
+
+      // AJAX Request
+      const response = await axios.get<VacationModel[]>(appConfig.vacationsByUserUrl);
+
+      // Extract vacations
+      userVacations = response.data;
+
+    }
+    
+    // Return vacations
+    return userVacations;
+
+  }
+  
   // Get one vacation
   public async getOneVacation(id: string): Promise<VacationModel> {
 
@@ -46,6 +73,7 @@ class VacationsService {
 
       // Extract vacation
       vacation = response.data;
+
     }
 
     // Return vacation
@@ -61,8 +89,8 @@ class VacationsService {
     const myFormData = this.setMyFormData(vacation);
 
     // Sending object with file (the image)
-    const response = await axios.post<VacationModel>(appConfig.vacationsUrl, myFormData); 
-    
+    const response = await axios.post<VacationModel>(appConfig.vacationsUrl, myFormData);
+
     // Extract the added vacation
     const addedVacation = response.data;
 
@@ -75,12 +103,12 @@ class VacationsService {
   public async updateVacation(vacation: VacationModel): Promise<void> {
 
     // AJAX Request - Sending an existing vacation to update, receiving back the updated vacation - after updating it in the database
-    
+
     const myFormData = this.setMyFormData(vacation);
 
     // Sending object with file (the image)
     const response = await axios.put<VacationModel>(appConfig.vacationsUrl + vacation.id, myFormData);
-    
+
     // Extract the updated vacation
     const updatedVacation = response.data;
 
@@ -114,8 +142,9 @@ class VacationsService {
       myFormData.append("imageName", vacation.imageName);
     }
     return myFormData;
+
   }
-  
+
 }
 
 const vacationsService = new VacationsService();

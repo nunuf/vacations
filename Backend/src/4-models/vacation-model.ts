@@ -10,21 +10,17 @@ class VacationModel {
   public price: number;
   public image: UploadedFile;
   public imageName: string;
-  public isFollowing: number;
-  public followersCount: number;
- 
+  
   public constructor(vacation: VacationModel) {
-   this.id = vacation.id;
-   this.destination = vacation.destination;
-   this.description = vacation.description;
-   this.startDate = vacation.startDate;
-   this.endDate = vacation.endDate;
-   this.price = vacation.price;
-   this.image = vacation.image;
-   this.imageName = vacation.imageName;
-   this.isFollowing = vacation.isFollowing;
-   this.followersCount = vacation.followersCount;
-  } 
+    this.id = vacation.id;
+    this.destination = vacation.destination;
+    this.description = vacation.description;
+    this.startDate = vacation.startDate;
+    this.endDate = vacation.endDate;
+    this.price = vacation.price;
+    this.image = vacation.image;
+    this.imageName = vacation.imageName;
+  }
 
   public static validationSchema = Joi.object({
     id: Joi.string().optional().uuid(),
@@ -34,15 +30,13 @@ class VacationModel {
     endDate: Joi.date().required().iso(),
     price: Joi.number().required().positive(),
     image: Joi.object().optional(),
-    imageName: Joi.string().optional(),
-    isFollowing: Joi.number().optional(),
-    followersCount: Joi.number().optional()
+    imageName: Joi.string().optional()
   });
 
   public validate(): string {
     const result = VacationModel.validationSchema.validate(this);
     return result.error?.message;
-  }  
- }
- 
- export default VacationModel;
+  }
+}
+
+export default VacationModel;
