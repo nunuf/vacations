@@ -83,7 +83,7 @@ const AddVacation: React.FC = (): JSX.Element => {
           error={formState.errors.startDate?.message !== undefined}
           helperText={formState.errors.startDate?.message}
           InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          {...register('startDate', VacationModel.startDateValidation)}
+          {...register("startDate", VacationModel.startDateValidation)}
         />
         <TextField
           type="date"
@@ -94,7 +94,7 @@ const AddVacation: React.FC = (): JSX.Element => {
           error={formState.errors.endDate?.message !== undefined}
           helperText={formState.errors.endDate?.message}
           InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          {...register('endDate', VacationModel.endDateValidation)} 
+          {...register("endDate", VacationModel.endDateValidation)} 
         />
         <TextField
           type="number"
@@ -107,11 +107,12 @@ const AddVacation: React.FC = (): JSX.Element => {
         />
         <div className="Preview">
           <IconButton color="secondary" aria-label="upload picture" component="label">
-            <input hidden type="file" accept="image/*" onChangeCapture={onSelectFile} {...register('image')} />
+            <input hidden type="file" accept="image/*" onChangeCapture={onSelectFile} {...register("image", VacationModel.imageValidation)} />
             <PhotoCamera />
           </IconButton>
           <img src={preview} width="80" height="75" alt='' />{/* preview for uploaded image */}
         </div>
+        <div>{formState.errors.image?.message}</div>
     
         <ButtonGroup variant="contained" fullWidth>
           <Button color="primary" type="submit" startIcon={<Send />}>Add</Button>

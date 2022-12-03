@@ -118,6 +118,7 @@ const addVacation = async (vacation: VacationModel): Promise<VacationModel> => {
   // Validation
   const errors = vacation.validate();
   if (errors) { throw new ValidationError(errors); }
+  if (await isVacationAlreadyExists(vacation)) { throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`); }
 
   // Save image to disk
   imageHandler.saveImage(vacation);
@@ -154,6 +155,7 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
   // Validation
   const errors = vacation.validate();
   if (errors) throw new ValidationError(errors);
+  if (await isVacationAlreadyExists(vacation)) { throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`); }
 
   // Query
   const sql = `
@@ -227,6 +229,21 @@ const deleteVacation = async (id: string): Promise<void> => {
   // Execute
   await dal.execute(deleteSql, [id]);
 
+};
+
+const isVacationAlreadyExists = async (vacation: VacationModel): Promise<boolean> => {
+  // Query
+  const sql = `
+    SELECT COUNT(*) AS count
+    FROM vacations
+    WHERE destination = ? AND startDate = ? AND endDate = ?
+  `;
+
+  // Execute
+  const result = await dal.execute(sql, [vacation.destination, vacation.startDate, vacation.endDate]);
+  
+  // Check if already exists
+  return result[0].count > 0;
 };
 
 export default {

@@ -14,15 +14,18 @@ import VacationCard from '../VacationCard/VacationCard';
 
 import './VacationList.css';
 
+const VACATIONS_PER_PAGE = 10;
+
 const VacationList: React.FC = (): JSX.Element => {
 
   const user = useUser();
+  const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(user?.role === RoleModel.Admin);
   const [vacations, setVacations] = useState<VacationModel[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [vacationPerPage, setVacationPerPage] = useState(3);
-  // const [currentVacation, setCurrentVacation] = useState();
+  const [allPage, setAllPage] = useState(1);
+  const [filteredPage, setFilteredPage] = useState(1);
+  const [currentPageVacations, setCurrentPageVacations] = useState([]);
 
   useEffect(() => {
     return setIsAdmin(user?.role === RoleModel.Admin);
@@ -35,15 +38,31 @@ const VacationList: React.FC = (): JSX.Element => {
   }, []);
   
   const getAllVacations = (): void => {
+    setIsLoading(true);
     vacationsService.getAllVacations()
-      .then(vacations => setVacations(vacations))
-      .catch(err => notifyService.error(err));
+      .then(allVacations => {
+        setVacations(allVacations);
+        setCurrentPageVacations(getVacationsPerPage(allVacations, allPage));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        notifyService.error(err);
+        setIsLoading(false);
+      });
   };
 
   const getFilteredVacations = (): void => {
+    setIsLoading(true);
     vacationsService.getUserVacations()
-      .then(vacations => setVacations(vacations))
-      .catch(err => notifyService.error(err));
+      .then(filteredVacations => {
+        setVacations(filteredVacations);
+        setCurrentPageVacations(getVacationsPerPage(filteredVacations, filteredPage));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        notifyService.error(err);
+        setIsLoading(false);
+      });
   };
 
   const filterVacations = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -62,14 +81,19 @@ const VacationList: React.FC = (): JSX.Element => {
     }
   };
 
-  // const indexOfLastVacation = currentPage * vacationPerPage;
-  // const indexOfFirstVacation = indexOfLastVacation - vacationPerPage;
-  // const currentVacation = vacations.slice(indexOfFirstVacation, indexOfLastVacation);
+  const getVacationsPerPage = (vacationList: VacationModel[], value: number): VacationModel[] => {
+    const indexOfLastVacation = value * VACATIONS_PER_PAGE;
+    const indexOfFirstVacation = indexOfLastVacation - VACATIONS_PER_PAGE;
+    return vacationList.slice(indexOfFirstVacation, indexOfLastVacation);
+  };
+
+  const handlePagination = (event: ChangeEvent<unknown>, value: number): void => {
+    setCurrentPageVacations(getVacationsPerPage(vacations, value));
+    !isFiltered ? setAllPage(value) : setFilteredPage(value);
+  };
 
   return (
     <div className="VacationList">
-
-      {vacations.length === 0 && <Spinner />}
 
       {
         isAdmin ?
@@ -77,29 +101,62 @@ const VacationList: React.FC = (): JSX.Element => {
           <NavLink to="/vacations/new">
             <Add sx={{ fontSize: 50, fontWeight: 'bold' }} className="Add" />
           </NavLink>
-          <NavLink to="/vacations/chart">
-            <Leaderboard sx={{ fontSize: 50, fontWeight: 'bold' }} className="Add" />
-          </NavLink>
+          {
+            vacations.length > 0 &&
+            <NavLink to="/vacations/chart">
+              <Leaderboard sx={{ fontSize: 50, fontWeight: 'bold' }} className="Add" />
+            </NavLink>
+          }
         </div> :
-        <FormControlLabel
-          control={
-            <Checkbox
-              icon={<FavoriteBorder color="secondary" />}
-              checkedIcon={<Favorite />}
-              sx={{ '& .MuiSvgIcon-root': { fontSize: 40 } }}
-              color="secondary"
-              onChange={filterVacations}
-              checked={isFiltered}
+        <>
+          {
+            vacations.length > 0 &&
+            <FormControlLabel
+              control={
+                <Checkbox
+                  icon={<FavoriteBorder color="secondary" />}
+                  checkedIcon={<Favorite />}
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 40 } }}
+                  color="secondary"
+                  onChange={filterVacations}
+                  checked={isFiltered}
+                />
+              }
+              label="My Vacations"
+              className="Checkbox"
             />
           }
-          label="My Vacations"
-          className="Checkbox"
-        />
+        </>
+      }
+      
+      {
+        isLoading &&
+        <div className="Spinner"><Spinner /></div>
       }
 
-      {vacations.map(v => <VacationCard key={v.id} vacation={v} deleteFollower={handleDeleteFollower} />)}
+      {
+        !isLoading && vacations.length === 0 &&
+        <div className="Title Center">No vacations found</div>
+      }
 
-      <Pagination count={10} color="secondary" />
+      {
+        !isLoading && vacations.length > 0 &&
+        <>
+          {
+            currentPageVacations.map(
+              v =>
+              <VacationCard key={v.id} vacation={v} deleteFollower={handleDeleteFollower} />
+            )
+          }
+          <Pagination
+            count={Math.ceil(vacations.length / VACATIONS_PER_PAGE)}
+            page={!isFiltered ? allPage : filteredPage}
+            onChange={handlePagination}
+            color="secondary"
+            className="Pagination"
+          />
+        </>
+      }
 
     </div>
   );

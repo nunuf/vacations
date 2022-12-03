@@ -57,7 +57,7 @@ const EditVacation: React.FC = (): JSX.Element => {
       .catch(err => notifyService.error(err));
   }, []);
 
-  async function send(vacation: VacationModel) {
+  const send = async (vacation: VacationModel): Promise<void> => {
     try {
       await vacationsService.updateVacation(vacation);
       notifyService.success("Vacation has been successfully updated");
@@ -66,7 +66,7 @@ const EditVacation: React.FC = (): JSX.Element => {
     catch (err: any) {
       notifyService.error(err);
     }
-  }
+  };
 
   return (
     <div className="EditVacation Box">
@@ -106,7 +106,7 @@ const EditVacation: React.FC = (): JSX.Element => {
           error={formState.errors.startDate?.message !== undefined}
           helperText={formState.errors.startDate?.message}
           InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          {...register('startDate')}
+          {...register("startDate", VacationModel.startDateValidation)}
         />
         <TextField
           type="date"
@@ -117,7 +117,7 @@ const EditVacation: React.FC = (): JSX.Element => {
           error={formState.errors.endDate?.message !== undefined}
           helperText={formState.errors.endDate?.message}
           InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          {...register('endDate')}
+          {...register("endDate", VacationModel.endDateValidation)} 
         />
         <TextField
           type="number"
@@ -131,7 +131,7 @@ const EditVacation: React.FC = (): JSX.Element => {
         />
         <div className="Preview">
           <IconButton color="primary" aria-label="upload picture" component="label">
-            <input hidden type="file" accept="image/*" onChangeCapture={onSelectFile} {...register('image')} />
+            <input hidden type="file" accept="image/*" onChangeCapture={onSelectFile} {...register("image")} />
             <PhotoCamera />
           </IconButton>
           {

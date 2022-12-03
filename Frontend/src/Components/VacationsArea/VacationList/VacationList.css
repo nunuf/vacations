@@ -19,6 +19,27 @@
   z-index: 5;
 }
 
+.VacationList .Spinner {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.VacationList .Center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.VacationList .Pagination {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 .css-19micn4-MuiButtonBase-root-MuiPaginationItem-root {
   color: white !important;
 }

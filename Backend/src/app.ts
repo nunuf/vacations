@@ -16,7 +16,7 @@ const server = express();
 
 // Defend against DoS attack
 server.use('/api', expressRateLimit({
-  max: 10, // Maximum requests per same client
+  max: 20, // Maximum requests per same client
   windowMs: 1000, // Time window to allow the max requests
 }));
 

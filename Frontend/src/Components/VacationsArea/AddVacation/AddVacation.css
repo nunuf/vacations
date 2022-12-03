@@ -17,3 +17,8 @@
 .AddVacation .Preview > img {
   border-radius: 10px;
 }
+
+.AddVacation .Preview ~ div {
+  color: red;
+  font-size: small;
+}

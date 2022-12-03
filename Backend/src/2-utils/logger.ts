@@ -2,7 +2,7 @@ import fsPromises from 'fs/promises';
 import path from 'path';
 
 // Log file
-const logFile = path.join(__dirname, '..', '1-assets/logs', 'logger.log');
+const logFile = path.join(__dirname, '..', '1-assets', 'logs', 'logger.log');
 
 // Log massage
 const logger = async (severity: string, message: string, err?: any): Promise<void> => {
