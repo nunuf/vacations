@@ -155,7 +155,21 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
   // Validation
   const errors = vacation.validate();
   if (errors) throw new ValidationError(errors);
-  if (await isVacationAlreadyExists(vacation)) { throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`); }
+  if (await isDuplicatedVacation(vacation)) {
+    if (!vacation.image) {
+      throw new ValidationError(`Vacation to '${vacation.destination}' already exists`);
+    }
+  }
+  
+  // Save image to disk if new image was uploaded
+  if (vacation.image) {
+    // Delete current image
+    imageHandler.deleteImage(vacation);
+    // Save new image to disk
+    imageHandler.saveImage(vacation);
+    // Don't save new image in the database
+    delete vacation.image;
+  }
 
   // Query
   const sql = `
@@ -179,16 +193,6 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
     vacation.imageName,
     vacation.id
   ]);
-
-  // Save image to disk if new image was uploaded
-  if (vacation.image) {
-    // Delete current image
-    imageHandler.deleteImage(vacation);
-    // Save new image to disk
-    imageHandler.saveImage(vacation);
-    // Don't save new image in the database
-    delete vacation.image;
-  }
 
   // If not exist
   if (info.affectedRows === 0) { throw new ResourceNotFoundError(vacation.id); }
@@ -241,6 +245,21 @@ const isVacationAlreadyExists = async (vacation: VacationModel): Promise<boolean
 
   // Execute
   const result = await dal.execute(sql, [vacation.destination, vacation.startDate, vacation.endDate]);
+  
+  // Check if already exists
+  return result[0].count > 0;
+};
+
+const isDuplicatedVacation = async (vacation: VacationModel): Promise<boolean> => {
+  // Query
+  const sql = `
+    SELECT COUNT(*) AS count
+    FROM vacations
+    WHERE destination = ? AND description = ? AND startDate = ? AND endDate = ? AND price = ?
+  `;
+
+  // Execute
+  const result = await dal.execute(sql, [vacation.destination, vacation.description, vacation.startDate, vacation.endDate, vacation.price]);
   
   // Check if already exists
   return result[0].count > 0;

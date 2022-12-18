@@ -47,4 +47,4 @@ server.use('*', routeNotFound);
 server.use(catchAll);
 
 // Run the server
-server.listen(appConfig.port, () => console.log(`Listening on http://${appConfig.host}:${appConfig.port}`));
+server.listen(appConfig.port, () => console.log(`Listening on port ${appConfig.port}`));

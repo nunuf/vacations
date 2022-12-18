@@ -39,6 +39,7 @@ export function vacationsReducer(currentState = new VacationsState(), action: Va
 
     case VacationsActionType.AddVacation: // Here the payload is a vacation to add (VacationModel)
       newState.vacations.push(action.payload);
+      newState.vacations.sort((vacation1, vacation2) => new Date(vacation2.startDate).getTime() - new Date(vacation1.startDate).getTime());
       break;
 
     case VacationsActionType.UpdateVacation: // Here the payload is a vacation to update (VacationModel)
@@ -54,7 +55,7 @@ export function vacationsReducer(currentState = new VacationsState(), action: Va
         newState.vacations.splice(indexToDelete, 1);
       }
       break;
-    
+
     case VacationsActionType.AddFollower: // Here the payload is a follower to add (FollowerModel)
       const indexToAddFollower = newState.vacations.findIndex(v => v.id === action.payload.vacationId);
       if (indexToAddFollower >= 0) {
@@ -62,7 +63,7 @@ export function vacationsReducer(currentState = new VacationsState(), action: Va
         newState.vacations[indexToAddFollower].followersCount++;
       }
       break;
-    
+
     case VacationsActionType.DeleteFollower: // Here the payload is vacationId of the vacation to update (number)
       const indexToDeleteFollower = newState.vacations.findIndex(v => v.id === action.payload);
       if (indexToDeleteFollower >= 0) {

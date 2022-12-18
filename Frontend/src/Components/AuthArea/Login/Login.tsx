@@ -10,7 +10,7 @@ import './Login.css';
 
 const Login: React.FC = (): JSX.Element => {
 
-  const { register, handleSubmit } = useForm<CredentialsModel>();
+  const { formState, handleSubmit, register } = useForm<CredentialsModel>();
   const navigate = useNavigate();
 
   async function send(credentials: CredentialsModel) {
@@ -35,7 +35,7 @@ const Login: React.FC = (): JSX.Element => {
         <TextField label="Password" variant="outlined" type="password" className="TextBox" {...register("password")} />
 
         <ButtonGroup variant="contained" fullWidth className="Buttons">
-          <Button color="primary" type="submit" startIcon={<Send />}>Send</Button>
+          <Button color="primary" type="submit" startIcon={<Send />} disabled={!formState.dirtyFields.username || !formState.dirtyFields.password}>Send</Button>
           <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
         </ButtonGroup>
 

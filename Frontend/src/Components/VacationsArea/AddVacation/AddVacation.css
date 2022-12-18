@@ -8,6 +8,14 @@
   right: 10px;
 }
 
+.AddVacation .DateError {
+  color: #d32f2f;
+  font-family: Arial;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-left: 16px;
+}
+
 .AddVacation .Preview {
   display: flex;
   justify-content: center;
@@ -19,6 +27,7 @@
 }
 
 .AddVacation .Preview ~ div {
-  color: red;
-  font-size: small;
+  color: #d32f2f;
+  font-family: Arial;
+  font-size: 0.75rem;
 }

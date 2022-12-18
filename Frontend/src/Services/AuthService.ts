@@ -18,6 +18,7 @@ class AuthService {
 
     // Send token to Redux
     authStore.dispatch({ type: AuthActionType.Register, payload: token });
+
   }
 
   // Login existing user
@@ -25,17 +26,24 @@ class AuthService {
 
     // Send to backend the credentials
     const response = await axios.post<string>(appConfig.loginUrl, credentials);
+
     // Backend returns token
     const token = response.data;
     
     // Send token to Redux
     authStore.dispatch({ type: AuthActionType.Login, payload: token });
+
   }
 
   // Logout existing user
   public logout(): void {
+
+    // Clear vacations from Redux
     vacationsStore.dispatch({ type: VacationsActionType.ClearVacations });
+
+    // Clear token from Redux
     authStore.dispatch({ type: AuthActionType.Logout });
+
   }
 
 }

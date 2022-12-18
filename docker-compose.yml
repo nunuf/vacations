@@ -1,0 +1,110 @@
+# docker-compose.yml - defining docker containers
+
+# Our entire containers
+services:
+
+  # Our database service
+  magic-trip-database-service: 
+
+    # Database image
+    image: magic-trip-database-image
+
+    # Where is the Dockerfile to create image from
+    build: ./Database
+
+    # Container name
+    container_name: magic-trip-database-container
+
+    # Port Bindings
+    ports:
+      - 3306:3306
+
+    # Environment Variables
+    environment:
+      MARIADB_HOST: localhost # internal to the container
+      MARIADB_DATABASE: magic_trip
+      MARIADB_ROOT_USER: Harry
+      MARIADB_ROOT_PASSWORD: Potter
+
+    # Container restart policy
+    restart: unless-stopped
+
+    # Named Volume to persist the database
+    volumes:
+      - magic_trip:/bitnami/mariadb
+
+# ------------------------------------------------
+
+  # Our backend container
+  magic-trip-backend-service: 
+
+    # Image name to create
+    image: magic-trip-backend-image
+
+    # Where is the Dockerfile to create image from
+    build: ./Backend
+
+    # What is the name of the container to create
+    container_name: magic-trip-backend-container
+
+    # Port Binding (host:container)
+    ports:
+      - 3001:3001
+
+    # Environment Variables
+    environment:
+      PORT: 3001
+      MYSQL_HOST: magic-trip-database-service # Service name is the host name - where the database exists.
+      MYSQL_DATABASE: magic_trip
+      MYSQL_USER: Harry
+      MYSQL_PASSWORD: Potter
+
+    # Container restart policy
+    restart: unless-stopped
+
+    # Volumes between container to host
+    volumes:
+      # Host Volume for Hot-Reloading
+      - ./Backend:/app
+
+    # Which service we're depending on (for boot sequence)
+    depends_on:
+      - magic-trip-database-service
+
+# ------------------------------------------------
+
+  # Frontend container
+  magic-trip-frontend-service: 
+
+    # Image name
+    image: magic-trip-frontend-image
+
+    # Where the Dockerfile exists
+    build: ./Frontend
+
+    # Container name
+    container_name: magic-trip-frontend-container
+
+    # Port binding (host:container)
+    ports: 
+      - 3000:3000
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Host Volume (for hot reloading)
+    volumes: 
+      - ./Frontend:/app
+
+    # Which project we're depending on
+    depends_on:
+      - magic-trip-backend-service
+
+# ------------------------------------------------
+
+# Named Volume list for recognizing all named volumes
+volumes:
+  magic_trip:
+
+# for hot reloading react
+# "start": "WATCHPACK_POLLING=true react-scripts start"

@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import React, { BaseSyntheticEvent, ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Send, Clear, PhotoCamera, Close } from '@mui/icons-material';
@@ -14,10 +14,24 @@ const AddVacation: React.FC = (): JSX.Element => {
 
   const { formState, handleSubmit, register } = useForm<VacationModel>();
   const navigate = useNavigate();
+  const [startDate, setStartDate] = useState({ value: '', isDirty: false });
+  const [endDate, setEndDate] = useState({ value: '', isDirty: false });
   const [selectedFile, setSelectedFile] = useState<File>();
   const [preview, setPreview] = useState<string>();
 
   useVerifyLoggedIn();
+
+  useEffect(() => {
+    // Prompt confirmation when reload page is triggered
+    window.onbeforeunload = () => { return ''; };
+    if (window.confirm) {
+      vacationsService.getAllVacations()
+        .then(vacations => vacations)
+        .catch(err => notifyService.error(err));
+    }
+    // Unmount the window.onbeforeunload event
+    return () => { window.onbeforeunload = null; };
+  }, []);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -40,7 +54,10 @@ const AddVacation: React.FC = (): JSX.Element => {
 
   const send = async (vacation: VacationModel) => {
     try {
-      await vacationsService.addVacation(vacation);
+      setStartDate({ ...startDate, isDirty: true });
+      setEndDate({ ...endDate, isDirty: true });
+      const vacationToAdd = { ...vacation, startDate: new Date(startDate.value), endDate: new Date(endDate.value) };
+      await vacationsService.addVacation(vacationToAdd);
       notifyService.success('Vacation has been successfully added');
       navigate('/vacations');
     }
@@ -51,14 +68,14 @@ const AddVacation: React.FC = (): JSX.Element => {
 
   return (
     <div className="AddVacation Box">
-      
+
       <NavLink to="/vacations" className="Close"><Close /></NavLink>
 
       <div className="Title">Add Vacation</div>
 
       <form onSubmit={handleSubmit(send)}>
 
-        <TextField 
+        <TextField
           variant="outlined"
           label="Destination"
           className="TextBox"
@@ -76,31 +93,36 @@ const AddVacation: React.FC = (): JSX.Element => {
         />
         <TextField
           type="date"
-          variant="outlined" 
+          variant="outlined"
           label="Start Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
-          error={formState.errors.startDate?.message !== undefined}
-          helperText={formState.errors.startDate?.message}
-          InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          {...register("startDate", VacationModel.startDateValidation)}
+          InputProps={{ inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
+          value={startDate.value}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setStartDate({ value: event.target.value, isDirty: true })}
+          onBlur={() => setStartDate({ ...startDate, isDirty: true })}
         />
+        {startDate.isDirty === true && !startDate.value && <div className='DateError'>Missing start date</div>}
+        {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>Start date should be before end date</div>}
         <TextField
           type="date"
           variant="outlined"
           label="End Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
-          error={formState.errors.endDate?.message !== undefined}
-          helperText={formState.errors.endDate?.message}
-          InputProps={{inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          {...register("endDate", VacationModel.endDateValidation)} 
+          InputProps={{ inputProps: { min: `${startDate.value ? new Date(startDate.value).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}` } }}
+          value={endDate.value}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setEndDate({ value: event.target.value, isDirty: true })}
+          onBlur={() => setEndDate({ ...endDate, isDirty: true })}
         />
+        {endDate.isDirty === true && !endDate.value && <div className='DateError'>Missing end date</div>}
+        {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>End date should be after start date</div>}
         <TextField
           type="number"
           variant="outlined"
           label="Price"
           className="TextBox"
+          InputProps={{ inputProps: { step: 0.01 } }}
           error={formState.errors.price?.message !== undefined}
           helperText={formState.errors.price?.message}
           {...register("price", VacationModel.priceValidation)}
@@ -113,9 +135,9 @@ const AddVacation: React.FC = (): JSX.Element => {
           <img src={preview} width="80" height="75" alt='' />{/* preview for uploaded image */}
         </div>
         <div>{formState.errors.image?.message}</div>
-    
+
         <ButtonGroup variant="contained" fullWidth>
-          <Button color="primary" type="submit" startIcon={<Send />}>Add</Button>
+          <Button color="primary" type="submit" startIcon={<Send />} disabled={!formState.errors || !startDate.value || !endDate.value}>Add</Button>
           <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
         </ButtonGroup>
 

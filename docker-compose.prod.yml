@@ -1,0 +1,107 @@
+# docker-compose.prod.yml - defining docker containers
+
+# Our entire containers
+services:
+
+  # Our database service
+  magic-trip-database-service: 
+
+    # Database image
+    image: magic-trip-database-image
+
+    # Where is the Dockerfile to create image from
+    build: ./Database
+
+    # Container name
+    container_name: magic-trip-database-container
+
+    # Port Bindings
+    ports:
+      - 3306:3306
+
+    # Environment Variables
+    environment:
+      MARIADB_HOST: localhost # internal to the container
+      MARIADB_DATABASE: magic_trip
+      MARIADB_ROOT_USER: Harry
+      MARIADB_ROOT_PASSWORD: Potter
+
+    # Container restart policy
+    restart: unless-stopped
+
+    # Named Volume to persist the database
+    volumes: 
+      - magic_trip:/bitnami/mariadb
+
+# ------------------------------------------------
+
+  # Our backend container
+  magic-trip-backend-service: 
+
+    # Image name to create
+    image: magic-trip-backend-image-prod
+
+    # Where is the Dockerfile to create image from
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.prod
+      args:
+        - FRONTEND_BASE_URL=http://134.209.166.35
+
+    # What is the name of the container to create
+    container_name: magic-trip-backend-container
+
+    # Port Binding (host:container)
+    ports:
+      - 3001:3001
+
+    # Environment Variables
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      MYSQL_HOST: magic-trip-database-service # Service name is the host name - where the database exists
+      MYSQL_DATABASE: magic_trip
+      MYSQL_USER: Harry
+      MYSQL_PASSWORD: Potter
+
+    # Container restart policy
+    restart: unless-stopped
+
+    # Which service we're depending on (for boot sequence)
+    depends_on:
+      - magic-trip-database-service
+
+# ------------------------------------------------
+
+  # Frontend container
+  magic-trip-frontend-service: 
+
+    # Image name
+    image: magic-trip-frontend-image-prod
+
+    # Where the Dockerfile exists
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.prod
+      args:
+        - REACT_APP_BACKEND_BASE_URL=http://134.209.166.35/api/
+
+    # Container name
+    container_name: magic-trip-frontend-container
+
+    # Port binding (host:container)
+    ports: 
+      - 80:80
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Which project we're depending on
+    depends_on:
+      - magic-trip-backend-service
+
+# ------------------------------------------------
+
+# Named Volume list for recognizing all named volumes
+volumes:
+  magic_trip:

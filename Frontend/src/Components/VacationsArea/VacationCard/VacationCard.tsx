@@ -15,10 +15,11 @@ import './VacationCard.css';
 
 interface VacationCardProps {
   vacation: VacationModel;
-  deleteFollower: () => void;
+  followerDeleted: () => void;
+  vacationDeleted: () => void;
 }
 
-const VacationCard: React.FC<VacationCardProps> = ({ vacation, deleteFollower }): JSX.Element => {
+const VacationCard: React.FC<VacationCardProps> = ({ vacation, followerDeleted, vacationDeleted }): JSX.Element => {
 
   const navigate = useNavigate();
   const user = useUser();
@@ -36,7 +37,7 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation, deleteFollower })
         await followersService.addFollower({ vacationId: vacation.id, userId: user.id });
       } else {
         await followersService.deleteFollower(vacation.id, user.id);
-        deleteFollower();
+        followerDeleted();
       }
       setChecked(isChecked);
     }
@@ -48,6 +49,7 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation, deleteFollower })
   const deleteVacation = async (id: string) => {
     try {
       await vacationsService.deleteVacation(id);
+      vacationDeleted();
       notifyService.success("Vacation has been deleted");
       navigate("/vacations");
     }

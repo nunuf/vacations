@@ -8,6 +8,14 @@
   right: 10px;
 }
 
+.EditVacation .DateError {
+  color: #d32f2f;
+  font-family: Arial;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-left: 16px;
+}
+
 .EditVacation .Preview {
   display: flex;
   justify-content: center;

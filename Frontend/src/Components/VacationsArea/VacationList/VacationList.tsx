@@ -5,6 +5,7 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import RoleModel from '../../../Models/RoleModel';
 import VacationModel from '../../../Models/VacationModel';
+import { vacationsStore } from '../../../Redux/VacationsState';
 import notifyService from '../../../Services/NotifyService';
 import vacationsService from '../../../Services/VacationsService';
 import useUser from '../../../Utils/useUser';
@@ -36,7 +37,7 @@ const VacationList: React.FC = (): JSX.Element => {
   useEffect(() => {
     getAllVacations();
   }, []);
-  
+
   const getAllVacations = (): void => {
     setIsLoading(true);
     vacationsService.getAllVacations()
@@ -75,10 +76,14 @@ const VacationList: React.FC = (): JSX.Element => {
     setIsFiltered(isChecked);
   };
 
-  const handleDeleteFollower = (): void => {
+  const handleFollowerDeleted = (): void => {
     if (isFiltered === true) {
       getFilteredVacations();
     }
+  };
+
+  const handleVacationDeleted = (): void => {
+    getAllVacations();
   };
 
   const getVacationsPerPage = (vacationList: VacationModel[], value: number): VacationModel[] => {
@@ -99,12 +104,12 @@ const VacationList: React.FC = (): JSX.Element => {
         isAdmin ?
         <div className="AdminButtons">
           <NavLink to="/vacations/new">
-            <Add sx={{ fontSize: 50, fontWeight: 'bold' }} className="Add" />
+            <Add sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
           </NavLink>
           {
             vacations.length > 0 &&
             <NavLink to="/vacations/chart">
-              <Leaderboard sx={{ fontSize: 50, fontWeight: 'bold' }} className="Add" />
+              <Leaderboard sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
             </NavLink>
           }
         </div> :
@@ -128,7 +133,7 @@ const VacationList: React.FC = (): JSX.Element => {
           }
         </>
       }
-      
+
       {
         isLoading &&
         <div className="Spinner"><Spinner /></div>
@@ -145,7 +150,12 @@ const VacationList: React.FC = (): JSX.Element => {
           {
             currentPageVacations.map(
               v =>
-              <VacationCard key={v.id} vacation={v} deleteFollower={handleDeleteFollower} />
+              <VacationCard
+                key={v.id}
+                vacation={v}
+                followerDeleted={handleFollowerDeleted}
+                vacationDeleted={handleVacationDeleted}
+              />
             )
           }
           <Pagination
@@ -154,6 +164,8 @@ const VacationList: React.FC = (): JSX.Element => {
             onChange={handlePagination}
             color="secondary"
             className="Pagination"
+            showFirstButton
+            showLastButton
           />
         </>
       }

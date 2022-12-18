@@ -27,6 +27,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# Data
-src/1-Assets/images

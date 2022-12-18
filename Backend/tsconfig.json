@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES6",
     "esModuleInterop": true,
+    "moduleResolution": "Node",
     "module": "commonjs",
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": false
   }
 }

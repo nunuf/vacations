@@ -36,6 +36,8 @@
   text-align: center;
   background-image: linear-gradient(90deg, gray, white);
   border-radius: 10px;
+  opacity: calc(80%);
+  z-index: 2;
 }
 
 .VacationCard .Description {

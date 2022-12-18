@@ -1,10 +1,11 @@
 class Config {
-  public vacationsUrl = 'http://localhost:3001/api/vacations/';
-  public vacationsByUserUrl = 'http://localhost:3001/api/vacations-by-user/';
-  public vacationImagesUrl = 'http://localhost:3001/api/vacations/images/';
-  public registerUrl = 'http://localhost:3001/api/auth/register/';
-  public loginUrl = 'http://localhost:3001/api/auth/login/';
-  public followersUrl = 'http://localhost:3001/api/followers/';
+  private baseUrl = process.env.REACT_APP_BACKEND_BASE_URL || 'http://localhost:3001/api/'; // 'http://134.209.166.35:3001/api/';
+  public vacationsUrl = this.baseUrl + 'vacations/';
+  public vacationsByUserUrl = this.baseUrl + 'vacations-by-user/';
+  public vacationImagesUrl = this.baseUrl + 'vacations/images/';
+  public registerUrl = this.baseUrl + 'auth/register/';
+  public loginUrl = this.baseUrl + 'auth/login/';
+  public followersUrl = this.baseUrl + 'followers/';
 }
 
 const appConfig = new Config(); // Singleton
