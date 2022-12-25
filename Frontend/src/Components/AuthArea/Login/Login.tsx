@@ -13,7 +13,7 @@ const Login: React.FC = (): JSX.Element => {
   const { formState, handleSubmit, register } = useForm<CredentialsModel>();
   const navigate = useNavigate();
 
-  async function send(credentials: CredentialsModel) {
+  const send = async (credentials: CredentialsModel): Promise<void> => {
     try {
       await authService.login(credentials);
       notifyService.success("Welcome Back!");
@@ -22,7 +22,7 @@ const Login: React.FC = (): JSX.Element => {
     catch (err: any) {
       notifyService.error(err);
     }
-  }
+  };
 
   return (
     <div className="Login Box">

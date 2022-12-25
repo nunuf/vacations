@@ -34,7 +34,7 @@ export interface AuthAction {
 }
 
 // 4. Auth Reducer
-export function authReducer(currentState = new AuthState(), action: AuthAction): AuthState {
+export const authReducer = (currentState = new AuthState(), action: AuthAction): AuthState => {
 
   // Duplicate current state
   const newState = { ...currentState };
@@ -59,7 +59,7 @@ export function authReducer(currentState = new AuthState(), action: AuthAction):
 
   // Return the new state
   return newState;
-}
+};
 
 // 5. Auth Store
 export const authStore = createStore(authReducer);

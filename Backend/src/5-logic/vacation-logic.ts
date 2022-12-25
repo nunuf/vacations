@@ -1,9 +1,13 @@
+import fs from 'fs';
 import { OkPacket } from 'mysql';
+import path from 'path';
 import { v4 as uuid } from 'uuid';
 import dal from '../2-utils/dal';
-import imageHandler from '../2-utils/imageHandler';
 import { ResourceNotFoundError, ValidationError } from '../4-models/error-models';
 import VacationModel from '../4-models/vacation-model';
+
+// Images path
+const imagesPath = path.join(__dirname, '..', '1-assets', 'images');
 
 // Get all vacations
 const getAllVacations = async (userId: string): Promise<VacationModel[]> => {
@@ -121,7 +125,7 @@ const addVacation = async (vacation: VacationModel): Promise<VacationModel> => {
   if (await isVacationAlreadyExists(vacation)) { throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`); }
 
   // Save image to disk
-  imageHandler.saveImage(vacation);
+  saveImage(vacation);
   // Don't save image in the database
   delete vacation.image;
 
@@ -164,9 +168,9 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
   // Save image to disk if new image was uploaded
   if (vacation.image) {
     // Delete current image
-    imageHandler.deleteImage(vacation);
+    deleteImage(vacation);
     // Save new image to disk
-    imageHandler.saveImage(vacation);
+    saveImage(vacation);
     // Don't save new image in the database
     delete vacation.image;
   }
@@ -222,7 +226,8 @@ const deleteVacation = async (id: string): Promise<void> => {
   if (!vacation) { throw new ResourceNotFoundError(id); }
 
   // Delete image from disk
-  imageHandler.deleteImage(vacation);
+  
+  deleteImage(vacation);
 
   // Query DELETE vacation
   const deleteSql = `
@@ -263,6 +268,20 @@ const isDuplicatedVacation = async (vacation: VacationModel): Promise<boolean> =
   
   // Check if already exists
   return result[0].count > 0;
+};
+
+const deleteImage = (vacation: VacationModel): void => {
+  const image = path.join(imagesPath, vacation.imageName);
+  if (fs.existsSync(image)) {
+    fs.unlinkSync(image);
+  }
+};
+
+const saveImage = async (vacation: VacationModel): Promise<void> => {
+  const extension = vacation.image.name.substring(vacation.image.name.lastIndexOf('.'));
+  vacation.imageName = uuid() + extension;
+  const image = path.join(imagesPath, vacation.imageName);
+  await vacation.image.mv(image);
 };
 
 export default {

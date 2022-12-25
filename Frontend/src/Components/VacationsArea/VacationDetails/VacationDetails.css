@@ -1,20 +1,46 @@
 .VacationDetails {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
+  height: 75%;
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 20% 70% 10%;
+  grid-template-columns: repeat(5, 1fr);
   background-image: linear-gradient(to left, violet, indigo, red);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  position: absolute;
   z-index: 5;
 }
 
-.VacationDetails > p {
-  font-size: 16px;
-	font-weight: bold;
+.VacationDetails .Title {
+  grid-column: span 5;
 }
 
-.VacationDetails > img {
-	width: 400px;
-  height: 300px;
+.VacationDetails .Details {
+  grid-column: span 2;
+  font-size: 20px;
+	font-weight: bold;
+  text-align: left;
+  margin-left: 10%;
+}
+
+.VacationDetails .Details > p {
+  margin: 28px;
+}
+
+.VacationDetails .Image {
+  grid-column: span 3;
+}
+
+.VacationDetails .Image > img {
+  height: 100%;
+	width: 60%;
   border-radius: 10px;
+}
+
+.VacationDetails .Back {
+  grid-column: span 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

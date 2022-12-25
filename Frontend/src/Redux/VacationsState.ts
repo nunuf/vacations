@@ -27,7 +27,7 @@ export interface VacationsAction {
 }
 
 // 4. Reducer - a function which will be invoked when calling dispatch to perform the operation
-export function vacationsReducer(currentState = new VacationsState(), action: VacationsAction): VacationsState {
+export const vacationsReducer = (currentState = new VacationsState(), action: VacationsAction): VacationsState => {
 
   const newState = { ...currentState };
 
@@ -47,6 +47,7 @@ export function vacationsReducer(currentState = new VacationsState(), action: Va
       if (indexToUpdate >= 0) {
         newState.vacations[indexToUpdate] = action.payload;
       }
+      newState.vacations.sort((vacation1, vacation2) => new Date(vacation2.startDate).getTime() - new Date(vacation1.startDate).getTime());
       break;
 
     case VacationsActionType.DeleteVacation: // Here the payload is the id of the vacation to delete (number)
@@ -78,7 +79,7 @@ export function vacationsReducer(currentState = new VacationsState(), action: Va
   }
 
   return newState;
-}
+};
 
 // 5. Store - manager object from Redux library which handles the entire operation
 // export const vacationsStore = createStore(vacationsReducer, composeWithDevTools()); // Development

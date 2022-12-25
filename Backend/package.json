@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "start": "nodemon --exec ts-node src/app.ts",
-    "startWithHotReloading": "nodemon --legacy-watch --exec ts-node src/app.ts"
+    "start:HotReloading": "nodemon --legacy-watch --exec ts-node src/app.ts",
+    "build": "tsc && npm run assets:copy",
+    "assets:copy": "copyfiles -u 1 ./src/1-assets/** dist"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +18,8 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/mysql": "^2.15.21",
     "@types/node": "^18.7.18",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "copyfiles": "^2.4.1"
   },
   "dependencies": {
     "cors": "^2.8.5",

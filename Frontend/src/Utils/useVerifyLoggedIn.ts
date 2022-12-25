@@ -4,7 +4,7 @@ import { authStore } from '../Redux/AuthState';
 
 // Custom Hook
 
-function useVerifyLoggedIn() {
+const useVerifyLoggedIn = () => {
 
   const navigate = useNavigate();
 
@@ -17,6 +17,6 @@ function useVerifyLoggedIn() {
 
   }, []);
 
-}
+};
 
 export default useVerifyLoggedIn;

@@ -7,6 +7,7 @@ import VacationModel from '../../../Models/VacationModel';
 import notifyService from '../../../Services/NotifyService';
 import vacationsService from '../../../Services/VacationsService';
 import useVerifyLoggedIn from '../../../Utils/useVerifyLoggedIn';
+import Utils from '../../../Utils/Utils';
 
 import './AddVacation.css';
 
@@ -44,7 +45,7 @@ const AddVacation: React.FC = (): JSX.Element => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  const onSelectFile = (e: BaseSyntheticEvent) => {
+  const onSelectFile = (e: BaseSyntheticEvent): void => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
       return;
@@ -97,7 +98,7 @@ const AddVacation: React.FC = (): JSX.Element => {
           label="Start Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
-          InputProps={{ inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
+          InputProps={{ inputProps: { min: `${Utils.format(Utils.getDate(new Date()))}` } }}
           value={startDate.value}
           onChange={(event: ChangeEvent<HTMLInputElement>) => setStartDate({ value: event.target.value, isDirty: true })}
           onBlur={() => setStartDate({ ...startDate, isDirty: true })}
@@ -110,7 +111,15 @@ const AddVacation: React.FC = (): JSX.Element => {
           label="End Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
-          InputProps={{ inputProps: { min: `${startDate.value ? new Date(startDate.value).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}` } }}
+          InputProps={{
+            inputProps: {
+              min: `${
+                startDate.value ?
+                Utils.format(Utils.getDate(startDate.value)) :
+                Utils.format(Utils.getDate(new Date()))
+              }`
+            }
+          }}
           value={endDate.value}
           onChange={(event: ChangeEvent<HTMLInputElement>) => setEndDate({ value: event.target.value, isDirty: true })}
           onBlur={() => setEndDate({ ...endDate, isDirty: true })}

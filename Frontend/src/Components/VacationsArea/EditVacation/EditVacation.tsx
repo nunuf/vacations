@@ -7,6 +7,7 @@ import VacationModel from '../../../Models/VacationModel';
 import notifyService from '../../../Services/NotifyService';
 import vacationsService from '../../../Services/VacationsService';
 import appConfig from '../../../Utils/Config';
+import Utils from '../../../Utils/Utils';
 import useVerifyLoggedIn from '../../../Utils/useVerifyLoggedIn';
 
 import './EditVacation.css';
@@ -16,8 +17,8 @@ const EditVacation: React.FC = (): JSX.Element => {
   const { register, handleSubmit, formState, setValue } = useForm<VacationModel>();
   const navigate = useNavigate();
   const params = useParams();
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  const [startDate, setStartDate] = useState({ value: '', isDirty: false });
+  const [endDate, setEndDate] = useState({ value: '', isDirty: false });
   const [imageName, setImageName] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File>();
   const [preview, setPreview] = useState<string>();
@@ -35,13 +36,13 @@ const EditVacation: React.FC = (): JSX.Element => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  function onSelectFile(e: BaseSyntheticEvent) {
+  const onSelectFile = (e: BaseSyntheticEvent): void => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
       return;
     }
     setSelectedFile(e.target.files[0]);
-  }
+  };
 
   useEffect(() => {
     const id = params.vacationId; // Same name as router parameter
@@ -50,10 +51,8 @@ const EditVacation: React.FC = (): JSX.Element => {
         setValue("id", vacation.id);
         setValue("description", vacation.description);
         setValue("destination", vacation.destination);
-        setValue("startDate", vacation.startDate);
-        setStartDate(new Date(vacation.startDate).toISOString().split('T')[0]);
-        setValue("endDate", vacation.endDate);
-        setEndDate(new Date(vacation.endDate).toISOString().split('T')[0]);
+        setStartDate({ value: Utils.format(Utils.getDate(vacation.startDate)), isDirty: false });
+        setEndDate({ value: Utils.format(Utils.getDate(vacation.endDate)), isDirty: false });
         setValue("price", vacation.price);
         setValue("imageName", vacation.imageName);
         setImageName(vacation.imageName);
@@ -63,7 +62,7 @@ const EditVacation: React.FC = (): JSX.Element => {
 
   const send = async (vacation: VacationModel): Promise<void> => {
     try {
-      const vacationToUpdate = { ...vacation, startDate: new Date(startDate), endDate: new Date(endDate) };
+      const vacationToUpdate = { ...vacation, startDate: new Date(startDate.value), endDate: new Date(endDate.value) };
       await vacationsService.updateVacation(vacationToUpdate);
       notifyService.success("Vacation has been successfully updated");
       navigate("/vacations");
@@ -108,24 +107,32 @@ const EditVacation: React.FC = (): JSX.Element => {
           label="Start Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
-          InputProps={{ inputProps: { min: `${new Date().toISOString().split('T')[0]}` } }}
-          value={startDate}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => setStartDate(event.target.value)}
+          InputProps={{ inputProps: { min: `${Utils.format(Utils.getDate(new Date()))}` } }}
+          value={startDate.value}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setStartDate({ value: event.target.value, isDirty: true })}
         />
-        {!startDate && <div className='DateError'>Missing start date</div>}
-        {startDate && endDate && endDate < startDate && <div className='DateError'>Start date should be before end date</div>}
+        {startDate.isDirty === true && !startDate.value && <div className='DateError'>Missing start date</div>}
+        {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>Start date should be before end date</div>}
         <TextField
           type="date"
           variant="outlined"
           label="End Date"
           InputLabelProps={{ shrink: true }}
           className="TextBox"
-          InputProps={{ inputProps: { min: `${startDate ? new Date(startDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}` } }}
-          value={endDate}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => setEndDate(event.target.value)}
+          InputProps={{
+            inputProps: {
+              min: `${
+                startDate.value ?
+                Utils.format(Utils.getDate(startDate.value)) :
+                Utils.format(Utils.getDate(new Date()))
+              }`
+            }
+          }}
+          value={endDate.value}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setEndDate({ value: event.target.value, isDirty: true })}
         />
-        {!endDate && <div className='DateError'>Missing end date</div>}
-        {startDate && endDate && endDate < startDate && <div className='DateError'>End date should be after start date</div>}
+        {endDate.isDirty === true && !endDate.value && <div className='DateError'>Missing end date</div>}
+        {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>End date should be after start date</div>}
         <TextField
           type="number"
           variant="outlined"
@@ -154,7 +161,14 @@ const EditVacation: React.FC = (): JSX.Element => {
         </div>
 
         <ButtonGroup variant="contained" fullWidth>
-          <Button color="primary" type="submit" startIcon={<Send />} disabled={!Object.values(formState.dirtyFields).includes(true)}>Edit</Button>
+          <Button
+            color="primary"
+            type="submit"
+            startIcon={<Send />}
+            disabled={!Object.values(formState.dirtyFields).includes(true) && !startDate.isDirty === true && !endDate.isDirty === true}
+          >
+            Edit
+          </Button>
           <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
         </ButtonGroup>
 

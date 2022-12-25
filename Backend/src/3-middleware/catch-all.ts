@@ -13,9 +13,10 @@ const catchAll = (err: any, request: Request, response: Response, next: NextFunc
   logger('error', '', err);
 
   // Return original error only on development
-  const message = appConfig.isDevelopment || status !== 500 ? err.message : "Some error occurred, please try again";
+  const message = appConfig.isDevelopment || status !== 500 ? err.message : 'Some error occurred, please try again';
 
   response.status(status).send(message);
+
 };
 
 export default catchAll;

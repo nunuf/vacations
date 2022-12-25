@@ -9,8 +9,6 @@ import VacationDetails from '../../VacationsArea/VacationDetails/VacationDetails
 import VacationList from '../../VacationsArea/VacationList/VacationList';
 import PageNotFound from '../PageNotFound/PageNotFound';
 
-import './Routing.css';
-
 const Routing: React.FC = (): JSX.Element => {
   return (
     <div className="Routing">

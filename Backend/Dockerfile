@@ -18,4 +18,4 @@ RUN npm i
 COPY . /app
 
 # Execute command
-ENTRYPOINT npm run startWithHotReloading
+ENTRYPOINT npm run start:HotReloading

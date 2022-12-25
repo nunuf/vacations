@@ -1,8 +1,8 @@
 import axios from 'axios';
-import Moment from 'moment';
 import VacationModel from '../Models/VacationModel';
 import { VacationsActionType, vacationsStore } from '../Redux/VacationsState';
 import appConfig from '../Utils/Config';
+import Utils from '../Utils/Utils';
 
 class VacationsService {
 
@@ -133,14 +133,12 @@ class VacationsService {
     const myFormData = new FormData(); // Can contain strings and/or files
     myFormData.append("destination", vacation.destination);
     myFormData.append("description", vacation.description);
-    myFormData.append('startDate', Moment(new Date(vacation.startDate)).format('YYYY-MM-DD'));
-    myFormData.append('endDate', Moment(new Date(vacation.endDate)).format('YYYY-MM-DD'));
+    myFormData.append('startDate', Utils.format(Utils.getDate(vacation.startDate)));
+    myFormData.append('endDate', Utils.format(Utils.getDate(vacation.endDate)));
     myFormData.append("price", vacation.price.toString());
     const image = vacation.image[0]; // image = FileList, image[0] = File
     myFormData.append("image", image);
-    if (!image) {
-      myFormData.append("imageName", vacation.imageName);
-    }
+    myFormData.append("imageName", vacation.imageName);
     return myFormData;
 
   }

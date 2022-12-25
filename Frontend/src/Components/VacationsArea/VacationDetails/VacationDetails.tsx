@@ -18,7 +18,9 @@ const VacationDetails: React.FC = (): JSX.Element => {
   useEffect(() => {
     const id = params.vacationId;
     vacationsService.getOneVacation(id)
-      .then(vacation => setVacation(vacation))
+      .then(vacation => {
+        setVacation(vacation);
+      })
       .catch(err => {
         notifyService.error(err);
         navigate('/*');
@@ -31,16 +33,18 @@ const VacationDetails: React.FC = (): JSX.Element => {
         vacation &&
         <>
           <div className="Title">{vacation.destination}</div>
-          <p>Description: {vacation.description}</p>
-          <p>{new Date(vacation.startDate).toLocaleDateString()} - {new Date(vacation.endDate).toLocaleDateString()}</p>
-          <p>Price: ${vacation.price}</p>
-          {
-            vacation.imageName ?
-            <img src={appConfig.vacationImagesUrl + vacation.imageName} alt="" /> :
-            <img src={noImage} alt="" />
-          }
-          <br />
-          <br />
+          <div className="Details">
+            <p>Description:<br />{vacation.description}</p>
+            <p>{new Date(vacation.startDate).toLocaleDateString()} - {new Date(vacation.endDate).toLocaleDateString()}</p>
+            <p>Price: ${vacation.price}</p>
+          </div>
+          <div className="Image">
+            {
+              vacation.imageName ?
+              <img src={appConfig.vacationImagesUrl + vacation.imageName} alt="" /> :
+              <img src={noImage} alt="" />
+            }
+          </div>
           <NavLink to="/vacations" className="Back"><Undo /> Back</NavLink>
         </>
       }

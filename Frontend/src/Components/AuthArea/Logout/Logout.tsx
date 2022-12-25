@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import authService from '../../../Services/AuthService';
 import notifyService from '../../../Services/NotifyService';
 
-import './Logout.css';
-
 const Logout: React.FC = (): JSX.Element => {
 
   const navigate = useNavigate();
