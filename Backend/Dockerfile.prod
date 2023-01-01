@@ -21,7 +21,7 @@ ARG FRONTEND_BASE_URL
 ENV FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
 
 # Compile TypeScript into JavaScript - into /tmp/dist (as stated in tsconfig.json)
-RUN tsc
+RUN npm run build
 
 # -----------------PRODUCTION STAGE--------------------------------------
 
