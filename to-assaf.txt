@@ -1,0 +1,13 @@
+Admin credentials:
+------------------
+username: admin
+password: admin
+
+
+User with more than one subscribed vacations:
+---------------------------------------------
+username: ron
+password: 1234
+
+
+Please check the project at different times during the day and notice the changes in background. 😎

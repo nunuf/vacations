@@ -30,6 +30,7 @@ const Chart: React.FC = (): JSX.Element => {
     Legend
   );
 
+  // Chart configuration
   const options = {
     responsive: true,
     plugins: {
@@ -62,14 +63,17 @@ const Chart: React.FC = (): JSX.Element => {
     }
   };
 
+  // Get all followed vacations
   useEffect(() => {
     vacationsService.getAllVacations()
       .then(vacations => setVacations(vacations.filter(v => v.followersCount > 0)))
       .catch(err => notifyService.error(err));
   }, []);
 
+  // Chart labels
   const labels = vacations.map(v => v.destination);
 
+  // Chart data
   const data = {
     labels,
     datasets: [

@@ -26,10 +26,13 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation, followerDeleted, 
   const [isAdmin, setIsAdmin] = useState(user?.role === RoleModel.Admin);
   const [checked, setChecked] = useState(vacation.isFollowing === 1);
 
+  // On user changes
   useEffect(() => {
+    // Check if admin
     return setIsAdmin(user?.role === RoleModel.Admin);
   }, [user]);
 
+  // Follow vacation handler
   const followVacation = async (event: ChangeEvent<HTMLInputElement>) => {
     try {
       const isChecked = event.target.checked;
@@ -46,6 +49,7 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation, followerDeleted, 
     }
   };
 
+  // Delete vacation handler
   const deleteVacation = async (id: string) => {
     try {
       await vacationsService.deleteVacation(id);
@@ -88,20 +92,28 @@ const VacationCard: React.FC<VacationCardProps> = ({ vacation, followerDeleted, 
           Price: ${vacation.price}
         </div>
         <div>
-          {vacation.followersCount}
+          <Tooltip title={`Followers count: ${vacation.followersCount}`}>
+            <span>{vacation.followersCount}</span>
+          </Tooltip>
           {
             isAdmin ?
-            <Checkbox disabled color="secondary" icon={<FavoriteBorder />} checkedIcon={<Favorite />} checked={checked} /> :
-            <Checkbox color="secondary" icon={<FavoriteBorder />} checkedIcon={<Favorite />} checked={checked} onChange={followVacation} />
+            <Checkbox disabled icon={<Favorite />} /> :
+            <Tooltip title={checked ? 'Unfollow vacation' : 'Follow vacation'}>
+              <Checkbox color="secondary" icon={<FavoriteBorder />} checkedIcon={<Favorite />} checked={checked} onChange={followVacation} />
+            </Tooltip>
           }
           {
             isAdmin &&
             <>
               <NavLink to="#" onClick={() => deleteVacation(vacation.id)}>
-                <IconButton><Delete color="secondary" /></IconButton>
+                <Tooltip title="Delete vacation">
+                  <IconButton><Delete color="secondary" /></IconButton>
+                </Tooltip>
               </NavLink>
               <NavLink to={"/vacations/edit/" + vacation?.id}>
-                <IconButton><Edit color="secondary" /></IconButton>
+                <Tooltip title="Edit vacation">
+                  <IconButton><Edit color="secondary" /></IconButton>
+                </Tooltip>
               </NavLink>
             </>
           }

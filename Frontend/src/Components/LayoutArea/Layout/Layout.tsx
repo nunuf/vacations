@@ -6,8 +6,10 @@ import Routing from '../Routing/Routing';
 import './Layout.css';
 
 const Layout: React.FC = (): JSX.Element => {
+
   const [time, setTime] = useState(0);
 
+  // Render background by hour
   useEffect(() => {
     const now = new Date();
     let hour = now.getHours();
@@ -16,6 +18,7 @@ const Layout: React.FC = (): JSX.Element => {
 
   return (
     <div className={`Layout Sky${time}`}>
+
       <header>
         <Header />
       </header>
@@ -27,8 +30,10 @@ const Layout: React.FC = (): JSX.Element => {
       <footer>
         <Footer />
       </footer>
+
     </div>
   );
+  
 };
 
 export default Layout;

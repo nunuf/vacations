@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Add, Favorite, FavoriteBorder, Leaderboard } from '@mui/icons-material';
-import { Checkbox, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import RoleModel from '../../../Models/RoleModel';
 import VacationModel from '../../../Models/VacationModel';
@@ -27,16 +27,20 @@ const VacationList: React.FC = (): JSX.Element => {
   const [filteredPage, setFilteredPage] = useState(1);
   const [currentPageVacations, setCurrentPageVacations] = useState([]);
 
+  // On user changes
   useEffect(() => {
+    // Check if admin
     return setIsAdmin(user?.role === RoleModel.Admin);
   }, [user]);
 
+  // Check if logged in
   useVerifyLoggedIn();
 
   useEffect(() => {
     getAllVacations();
   }, []);
 
+  // Get all vacations 
   const getAllVacations = (): void => {
     setIsLoading(true);
     vacationsService.getAllVacations()
@@ -51,6 +55,7 @@ const VacationList: React.FC = (): JSX.Element => {
       });
   };
 
+  // Get followed vacations
   const getFilteredVacations = (): void => {
     setIsLoading(true);
     vacationsService.getUserVacations()
@@ -65,6 +70,7 @@ const VacationList: React.FC = (): JSX.Element => {
       });
   };
 
+  // Filter vacations handler
   const filterVacations = (event: ChangeEvent<HTMLInputElement>): void => {
     const isChecked = event.target.checked;
     if (isChecked === true) {
@@ -75,22 +81,26 @@ const VacationList: React.FC = (): JSX.Element => {
     setIsFiltered(isChecked);
   };
 
+  // Unfollow vacation handler
   const handleFollowerDeleted = (): void => {
     if (isFiltered === true) {
       getFilteredVacations();
     }
   };
 
+  // Delete vacation handler
   const handleVacationDeleted = (): void => {
     getAllVacations();
   };
 
+  // Get current page vacations
   const getVacationsPerPage = (vacationList: VacationModel[], value: number): VacationModel[] => {
     const indexOfLastVacation = value * VACATIONS_PER_PAGE;
     const indexOfFirstVacation = indexOfLastVacation - VACATIONS_PER_PAGE;
     return vacationList.slice(indexOfFirstVacation, indexOfLastVacation);
   };
 
+  // Pagination handler
   const handlePagination = (event: ChangeEvent<unknown>, value: number): void => {
     setCurrentPageVacations(getVacationsPerPage(vacations, value));
     !isFiltered ? setAllPage(value) : setFilteredPage(value);
@@ -103,32 +113,38 @@ const VacationList: React.FC = (): JSX.Element => {
         isAdmin ?
         <div className="AdminButtons">
           <NavLink to="/vacations/new">
-            <Add sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
+            <Tooltip title="Add new vacation">
+              <Add sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
+            </Tooltip>
           </NavLink>
           {
             vacations.length > 0 &&
             <NavLink to="/vacations/chart">
-              <Leaderboard sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
+              <Tooltip title="Go to charts">
+                <Leaderboard sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
+              </Tooltip>
             </NavLink>
           }
         </div> :
         <>
           {
             vacations.length > 0 &&
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={<FavoriteBorder color="secondary" />}
-                  checkedIcon={<Favorite />}
-                  sx={{ '& .MuiSvgIcon-root': { fontSize: 40 } }}
-                  color="secondary"
-                  onChange={filterVacations}
-                  checked={isFiltered}
-                />
-              }
-              label="My Vacations"
-              className="Checkbox"
-            />
+            <Tooltip title={isFiltered ? 'Show All Vacations' : 'Show Only My Vacations'}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    icon={<FavoriteBorder color="secondary" />}
+                    checkedIcon={<Favorite />}
+                    sx={{ '& .MuiSvgIcon-root': { fontSize: 40 } }}
+                    color="secondary"
+                    onChange={filterVacations}
+                    checked={isFiltered}
+                  />
+                }
+                label="My Vacations"
+                className="Checkbox"
+              />
+            </Tooltip>
           }
         </>
       }

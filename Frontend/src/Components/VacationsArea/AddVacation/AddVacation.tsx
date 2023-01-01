@@ -34,6 +34,7 @@ const AddVacation: React.FC = (): JSX.Element => {
     return () => { window.onbeforeunload = null; };
   }, []);
 
+  // On selected file changes
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -41,10 +42,11 @@ const AddVacation: React.FC = (): JSX.Element => {
     }
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
-    // free memory when ever this component is unmounted
+    // Free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
-
+  
+  // Set selected file
   const onSelectFile = (e: BaseSyntheticEvent): void => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
@@ -53,6 +55,7 @@ const AddVacation: React.FC = (): JSX.Element => {
     setSelectedFile(e.target.files[0]);
   };
 
+  // Add new vacation
   const send = async (vacation: VacationModel) => {
     try {
       setStartDate({ ...startDate, isDirty: true });

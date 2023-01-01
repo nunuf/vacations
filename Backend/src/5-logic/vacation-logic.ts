@@ -122,7 +122,9 @@ const addVacation = async (vacation: VacationModel): Promise<VacationModel> => {
   // Validation
   const errors = vacation.validate();
   if (errors) { throw new ValidationError(errors); }
-  if (await isVacationAlreadyExists(vacation)) { throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`); }
+  if (await isVacationAlreadyExists(vacation)) {
+    throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`);
+  }
 
   // Save image to disk
   saveImage(vacation);
@@ -163,6 +165,9 @@ const updateVacation = async (vacation: VacationModel): Promise<VacationModel> =
     if (!vacation.image) {
       throw new ValidationError(`Vacation to '${vacation.destination}' already exists`);
     }
+  }
+  if (await isVacationAlreadyExists(vacation)) {
+    throw new ValidationError(`Vacation to '${vacation.destination}' already exists in this dates`);
   }
   
   // Save image to disk if new image was uploaded
@@ -240,21 +245,29 @@ const deleteVacation = async (id: string): Promise<void> => {
 
 };
 
+// Already exist validation
 const isVacationAlreadyExists = async (vacation: VacationModel): Promise<boolean> => {
+  let result;
+
   // Query
-  const sql = `
+  let sql = `
     SELECT COUNT(*) AS count
     FROM vacations
-    WHERE destination = ? AND startDate = ? AND endDate = ?
-  `;
-
+    WHERE destination = ? AND startDate = ? AND endDate = ?`;
+  
   // Execute
-  const result = await dal.execute(sql, [vacation.destination, vacation.startDate, vacation.endDate]);
+  if (vacation.id === undefined) {
+    result = await dal.execute(sql, [vacation.destination, vacation.startDate, vacation.endDate]);
+  } else {
+    sql += ` AND vacationId <> ?`;
+    result = await dal.execute(sql, [vacation.destination, vacation.startDate, vacation.endDate, vacation.id]);
+  }
   
   // Check if already exists
   return result[0].count > 0;
 };
 
+// Duplication validation
 const isDuplicatedVacation = async (vacation: VacationModel): Promise<boolean> => {
   // Query
   const sql = `
@@ -270,6 +283,7 @@ const isDuplicatedVacation = async (vacation: VacationModel): Promise<boolean> =
   return result[0].count > 0;
 };
 
+// Delete existing image
 const deleteImage = (vacation: VacationModel): void => {
   const image = path.join(imagesPath, vacation.imageName);
   if (fs.existsSync(image)) {
@@ -277,6 +291,7 @@ const deleteImage = (vacation: VacationModel): void => {
   }
 };
 
+// Save new image in file system
 const saveImage = async (vacation: VacationModel): Promise<void> => {
   const extension = vacation.image.name.substring(vacation.image.name.lastIndexOf('.'));
   vacation.imageName = uuid() + extension;

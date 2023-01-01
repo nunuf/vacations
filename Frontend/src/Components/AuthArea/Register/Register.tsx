@@ -14,6 +14,7 @@ const Register: React.FC = (): JSX.Element => {
   const { formState, handleSubmit, register } = useForm<UserModel>();
   const navigate = useNavigate();
 
+  // Register new user
   const send = async (user: UserModel): Promise<void> => {
     try {
       await authService.register(user);

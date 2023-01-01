@@ -11,7 +11,7 @@ const Logout: React.FC = (): JSX.Element => {
 
     authService.logout();
 
-    notifyService.success("Bye Bye");
+    notifyService.success("Goodbye and have a magical day");
 
     navigate("/login");
 

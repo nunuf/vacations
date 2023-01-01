@@ -7,8 +7,8 @@ import VacationModel from '../../../Models/VacationModel';
 import notifyService from '../../../Services/NotifyService';
 import vacationsService from '../../../Services/VacationsService';
 import appConfig from '../../../Utils/Config';
-import Utils from '../../../Utils/Utils';
 import useVerifyLoggedIn from '../../../Utils/useVerifyLoggedIn';
+import Utils from '../../../Utils/Utils';
 
 import './EditVacation.css';
 
@@ -25,6 +25,7 @@ const EditVacation: React.FC = (): JSX.Element => {
 
   useVerifyLoggedIn();
 
+  // On selected file changes
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -32,10 +33,11 @@ const EditVacation: React.FC = (): JSX.Element => {
     }
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
-
+    // Free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
+  // Set selected file
   const onSelectFile = (e: BaseSyntheticEvent): void => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
@@ -44,8 +46,9 @@ const EditVacation: React.FC = (): JSX.Element => {
     setSelectedFile(e.target.files[0]);
   };
 
+  // Set selected vacation to edit
   useEffect(() => {
-    const id = params.vacationId; // Same name as router parameter
+    const id = params.vacationId;
     vacationsService.getOneVacation(id)
       .then(vacation => {
         setValue("id", vacation.id);
@@ -60,6 +63,7 @@ const EditVacation: React.FC = (): JSX.Element => {
       .catch(err => notifyService.error(err));
   }, []);
 
+  // Update existing vacation
   const send = async (vacation: VacationModel): Promise<void> => {
     try {
       const vacationToUpdate = { ...vacation, startDate: new Date(startDate.value), endDate: new Date(endDate.value) };

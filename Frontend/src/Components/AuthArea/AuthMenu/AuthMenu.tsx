@@ -10,7 +10,10 @@ const AuthMenu: React.FC = (): JSX.Element => {
 
   return (
     <div className="AuthMenu">
-      {!user && <span>Hello Guest</span>}
+      {
+        !user &&
+        <span>Hello Guest</span>
+      }
       {
         user &&
         <>

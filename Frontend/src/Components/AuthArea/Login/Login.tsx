@@ -13,6 +13,7 @@ const Login: React.FC = (): JSX.Element => {
   const { formState, handleSubmit, register } = useForm<CredentialsModel>();
   const navigate = useNavigate();
 
+  // Login with user's credentials
   const send = async (credentials: CredentialsModel): Promise<void> => {
     try {
       await authService.login(credentials);
