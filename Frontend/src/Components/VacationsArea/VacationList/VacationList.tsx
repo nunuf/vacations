@@ -114,14 +114,14 @@ const VacationList: React.FC = (): JSX.Element => {
         <div className="AdminButtons">
           <NavLink to="/vacations/new">
             <Tooltip title="Add new vacation">
-              <Add sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
+              <Add sx={{ fontSize: 50 }} />
             </Tooltip>
           </NavLink>
           {
             vacations.length > 0 &&
             <NavLink to="/vacations/chart">
               <Tooltip title="Go to charts">
-                <Leaderboard sx={{ fontSize: 50, fontWeight: "bold" }} className="Add" />
+                <Leaderboard sx={{ fontSize: 50 }} />
               </Tooltip>
             </NavLink>
           }

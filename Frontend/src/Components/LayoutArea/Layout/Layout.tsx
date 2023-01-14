@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import Routing from '../Routing/Routing';
 
 import './Layout.css';
 
+const DELAY = 60 * 60 * 1000; // 1 hour in msec
+
 const Layout: React.FC = (): JSX.Element => {
 
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(new Date().getHours());
+  const intervalRef = useRef(null);
 
   // Render background by hour
   useEffect(() => {
     const now = new Date();
-    let hour = now.getHours();
-    setTime(hour);
+    const start = DELAY - (now.getMinutes() * 60 + now.getSeconds()) * 1000 + now.getMilliseconds();
+    const timer = setTimeout(() => {
+      setTime(new Date().getHours());
+      intervalRef.current = setInterval(() => {
+        setTime(new Date().getHours());
+      }, DELAY);
+    }, start);
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(timer);
+    }
   }, []);
 
   return (
@@ -33,7 +45,7 @@ const Layout: React.FC = (): JSX.Element => {
 
     </div>
   );
-  
+
 };
 
 export default Layout;

@@ -33,11 +33,6 @@ const VacationDetails: React.FC = (): JSX.Element => {
         vacation &&
         <>
           <div className="Title">{vacation.destination}</div>
-          <div className="Details">
-            <p>Description:<br />{vacation.description}</p>
-            <p>{new Date(vacation.startDate).toLocaleDateString()} - {new Date(vacation.endDate).toLocaleDateString()}</p>
-            <p>Price: ${vacation.price}</p>
-          </div>
           <div className="Image">
             {
               vacation.imageName ?
@@ -45,7 +40,14 @@ const VacationDetails: React.FC = (): JSX.Element => {
               <img src={noImage} alt="" />
             }
           </div>
-          <NavLink to="/vacations" className="Back"><Undo /> Back</NavLink>
+          <div className="Details">
+            <p>Description:<br />{vacation.description}</p>
+            <p>{new Date(vacation.startDate).toLocaleDateString()} - {new Date(vacation.endDate).toLocaleDateString()}</p>
+            <p>Price: ${vacation.price}</p>
+          </div>
+          <NavLink to="/vacations" className="Back">
+            <Undo /> Back
+          </NavLink>
         </>
       }
     </div>

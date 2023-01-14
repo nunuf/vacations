@@ -89,8 +89,12 @@ const Chart: React.FC = (): JSX.Element => {
 
   return (
     <div className="Chart">
-      <Bar options={options} data={data} />
-      <NavLink to="/vacations" className="Back"><Undo /> Back</NavLink>
+      <div>
+        <Bar options={options} data={data} />
+      </div>
+      <NavLink to="/vacations" className="Back">
+        <Undo /> Back
+      </NavLink>
     </div>
   );
 };

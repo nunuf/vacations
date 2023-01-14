@@ -1,14 +1,12 @@
 .VacationList > .AdminButtons {
   position: absolute;
   top: 80px;
-  left: 20px;
-  font-weight: 900;
   text-decoration: none;
-  background-image: linear-gradient(to left, violet, indigo, red);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 7vh;
   z-index: 5;
+}
+
+.VacationList > .AdminButtons > a {
+  margin: 0 5px;
 }
 
 .VacationList > .Checkbox {

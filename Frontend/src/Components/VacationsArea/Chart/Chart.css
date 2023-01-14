@@ -3,10 +3,13 @@
   top: 50%;
   transform: translate(33%, -40%);
   width: 60%;
+  z-index: 5;
+}
+
+.Chart > div {
   background-image: linear-gradient(to left, violet, indigo, red);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  z-index: 5;
 }
 
 .Chart .Back {
