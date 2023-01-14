@@ -76,6 +76,15 @@ const EditVacation: React.FC = (): JSX.Element => {
     }
   };
 
+  // Clear form
+  const clear = (): void => {
+    setStartDate({ value: '', isDirty: false });
+    setEndDate({ value: '', isDirty: false });
+    setSelectedFile(undefined);
+    setPreview('');
+    setImageName('');
+  };
+
   return (
     <div className="EditVacation Box">
 
@@ -173,7 +182,7 @@ const EditVacation: React.FC = (): JSX.Element => {
           >
             Edit
           </Button>
-          <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
+          <Button color="secondary" type="reset" startIcon={<Clear />} onClick={clear}>Clear</Button>
         </ButtonGroup>
 
       </form>

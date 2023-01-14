@@ -70,6 +70,14 @@ const AddVacation: React.FC = (): JSX.Element => {
     }
   };
 
+  // Clear form
+  const clear = (): void => {
+    setStartDate({ value: '', isDirty: false });
+    setEndDate({ value: '', isDirty: false });
+    setSelectedFile(undefined);
+    setPreview('');
+  };
+
   return (
     <div className="AddVacation Box">
 
@@ -150,7 +158,7 @@ const AddVacation: React.FC = (): JSX.Element => {
 
         <ButtonGroup variant="contained" fullWidth>
           <Button color="primary" type="submit" startIcon={<Send />} disabled={!formState.errors || !startDate.value || !endDate.value}>Add</Button>
-          <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
+          <Button color="secondary" type="reset" startIcon={<Clear />} onClick={clear}>Clear</Button>
         </ButtonGroup>
 
       </form>
