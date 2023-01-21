@@ -11,3 +11,8 @@ password: 1234
 
 
 Please check the project at different times during the day and notice the changes in background. 😎
+
+
+Bonus: 
+------
+Link to open project on DigitalOcean: http://143.198.8.56
