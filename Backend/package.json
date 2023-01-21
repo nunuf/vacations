@@ -18,10 +18,10 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/mysql": "^2.15.21",
     "@types/node": "^18.7.18",
-    "@types/uuid": "^8.3.4",
-    "copyfiles": "^2.4.1"
+    "@types/uuid": "^8.3.4"
   },
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "express-fileupload": "^1.4.0",
