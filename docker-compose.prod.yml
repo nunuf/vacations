@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
 
     # Named Volume to persist the database
-    volumes: 
+    volumes:
       - magic_trip:/bitnami/mariadb
 
 # ------------------------------------------------
@@ -46,7 +46,7 @@ services:
       context: ./Backend
       dockerfile: Dockerfile.prod
       args:
-        - FRONTEND_BASE_URL=http://134.209.166.35
+        - FRONTEND_BASE_URL=http://143.198.8.56
 
     # What is the name of the container to create
     container_name: magic-trip-backend-container
@@ -84,7 +84,7 @@ services:
       context: ./Frontend
       dockerfile: Dockerfile.prod
       args:
-        - REACT_APP_BACKEND_BASE_URL=http://134.209.166.35/api/
+        - REACT_APP_BACKEND_BASE_URL=http://143.198.8.56:3001/api/
 
     # Container name
     container_name: magic-trip-frontend-container

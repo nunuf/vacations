@@ -54,7 +54,7 @@ services:
     # Environment Variables
     environment:
       PORT: 3001
-      MYSQL_HOST: magic-trip-database-service # Service name is the host name - where the database exists.
+      MYSQL_HOST: magic-trip-database-service # Service name is the host name - where the database exists
       MYSQL_DATABASE: magic_trip
       MYSQL_USER: Harry
       MYSQL_PASSWORD: Potter
