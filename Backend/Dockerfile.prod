@@ -23,6 +23,8 @@ ENV FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
 # Compile TypeScript into JavaScript - into /tmp/dist (as stated in tsconfig.json)
 RUN npm run build
 
+COPY ./src/1-assets /tmp/dist/1-assets
+
 # -----------------PRODUCTION STAGE--------------------------------------
 
 # Alpine OS specific version + Node.js specific version
