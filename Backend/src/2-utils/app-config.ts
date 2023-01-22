@@ -23,7 +23,7 @@ class ProductionConfig extends AppConfig {
   public user = process.env.MYSQL_USER;
   public password = process.env.MYSQL_PASSWORD;
   public port = process.env.PORT;
-  public frontEndUrl = process.env.FRONTEND_BASE_URL; // 'http://143.198.8.56';
+  public frontEndUrl = 'http://143.198.8.56'; // process.env.FRONTEND_BASE_URL;
 }
 
 const appConfig = (process.env.NODE_ENV === 'production') ? new ProductionConfig() : new DevelopmentConfig();
