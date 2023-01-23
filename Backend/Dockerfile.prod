@@ -1,5 +1,5 @@
 # Alpine OS specific version + Node.js specific version
-FROM node:16-alpine3.16 AS build-stage
+FROM node:18-alpine3.16 AS build-stage
 
 # Global installations needed for this stage
 RUN npm i -g typescript
@@ -16,10 +16,6 @@ RUN npm ci
 # Copy our application from current folder (.) to image working dir (/tmp)
 COPY . /tmp
 
-# Define environment variable for frontend project
-ARG FRONTEND_BASE_URL
-ENV FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
-
 # Compile TypeScript into JavaScript - into /tmp/dist (as stated in tsconfig.json)
 RUN npm run build
 
@@ -28,7 +24,7 @@ COPY ./src/1-assets /tmp/dist/1-assets
 # -----------------PRODUCTION STAGE--------------------------------------
 
 # Alpine OS specific version + Node.js specific version
-FROM node:16-alpine3.16 AS production-stage
+FROM node:18-alpine3.16 AS production-stage
 
 # Create the stage folder - containing JavaScript files
 WORKDIR /app

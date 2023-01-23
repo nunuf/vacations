@@ -45,8 +45,6 @@ services:
     build:
       context: ./Backend
       dockerfile: Dockerfile.prod
-      args:
-        - FRONTEND_BASE_URL=http://143.198.8.56
 
     # What is the name of the container to create
     container_name: magic-trip-backend-container
@@ -58,6 +56,7 @@ services:
     # Environment Variables
     environment:
       NODE_ENV: production
+      FRONTEND_BASE_URL: http://143.198.8.56
       PORT: 3001
       MYSQL_HOST: magic-trip-database-service # Service name is the host name - where the database exists
       MYSQL_DATABASE: magic_trip
