@@ -7,6 +7,10 @@ This project is a vacations management system using React, NodeJs, TypeScript an
 
 **Features:**  
 - JWT Authentication
+- DoS (Denial of Service) attack defense
+- Sanitize tags from request body
+- SQL injection defense
+- Hashed passwords
 - Cors
 - Redux
 - Routing
