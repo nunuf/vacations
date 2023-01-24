@@ -33,7 +33,7 @@
 
 .VacationList .Pagination {
   position: absolute;
-  bottom: 3%;
+  bottom: 3.5%;
   left: 50%;
   transform: translate(-50%, 0);
 }

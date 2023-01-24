@@ -6,7 +6,7 @@
     "start": "nodemon --exec ts-node src/app.ts",
     "start:HotReloading": "nodemon --legacy-watch --exec ts-node src/app.ts",
     "build": "tsc && npm run assets:copy",
-    "assets:copy": "copyfiles -u 1 src/1-assets/** dist"
+    "assets:copy": "copyfiles -u 1 \"./src/1-assets/**\" dist"
   },
   "keywords": [],
   "author": "",

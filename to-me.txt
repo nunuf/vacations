@@ -1,0 +1,25 @@
+
+Deploy in DigitalOcean:
+
+Open Git Bash terminal in VSCode
+docker-machine ls
+eval $(docker-machine env magic-trip-machine)
+docker-compose -f docker-compose.prod.yml down
+docker ps
+docker ps -a
+docker images
+docker rmi 07 61 8f
+docker volume ls
+docker volume rm vacations_magic_trip
+docker volume ls
+docker-compose -f docker-compose.prod.yml up -d
+docker ps
+docker exec -it 44b8503fefd5 //bin/sh
+exit
+
+
+$ docker ps
+CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                    NAMES
+3a16e09301d2   magic-trip-frontend-image-prod   "/bin/sh -c 'nginx -…"   14 minutes ago   Up 13 minutes   0.0.0.0:80->80/tcp       magic-trip-frontend-container  
+44b8503fefd5   magic-trip-backend-image-prod    "/bin/sh -c 'node /a…"   14 minutes ago   Up 14 minutes   0.0.0.0:3001->3001/tcp   magic-trip-backend-container   
+cbf15b1a715b   magic-trip-database-image        "/opt/bitnami/script…"   14 minutes ago   Up 14 minutes   0.0.0.0:3306->3306/tcp   magic-trip-database-container  
