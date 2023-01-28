@@ -1,9 +1,6 @@
-.Login > form {
-  margin: 30px;
-}
-
 .Login .Buttons {
   margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .Login > a {

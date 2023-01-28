@@ -27,50 +27,54 @@ const Register: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="Register Box">
+    <div className="Register Dialog Box">
+      
+      <h2>Register</h2>
 
       <form onSubmit={handleSubmit(send)}>
 
-        <h2>Register</h2>
+        <div className="Container">
 
-        <TextField
-          variant="outlined"
-          label="First name"
-          className="TextBox"
-          error={formState.errors.firstName?.message !== undefined}
-          helperText={formState.errors.firstName?.message}
-          {...register("firstName", UserModel.firstNameValidation)}
-        />
-        <TextField
-          variant="outlined"
-          label="Last name"
-          className="TextBox"
-          error={formState.errors.lastName?.message !== undefined}
-          helperText={formState.errors.lastName?.message}
-          {...register("lastName", UserModel.lastNameValidation)}
-        />
-        <TextField
-          variant="outlined"
-          label="Username"
-          className="TextBox"
-          error={formState.errors.username?.message !== undefined}
-          helperText={formState.errors.username?.message}
-          {...register("username", UserModel.usernameValidation)}
-        />
-        <TextField
-          variant="outlined"
-          label="Password"
-          type="password"
-          className="TextBox"
-          error={formState.errors.password?.message !== undefined}
-          helperText={formState.errors.password?.message}
-          {...register("password", UserModel.passwordValidation)}
-        />
+          <TextField
+            variant="outlined"
+            label="First name"
+            className="TextBox"
+            error={formState.errors.firstName?.message !== undefined}
+            helperText={formState.errors.firstName?.message}
+            {...register("firstName", UserModel.firstNameValidation)}
+          />
+          <TextField
+            variant="outlined"
+            label="Last name"
+            className="TextBox"
+            error={formState.errors.lastName?.message !== undefined}
+            helperText={formState.errors.lastName?.message}
+            {...register("lastName", UserModel.lastNameValidation)}
+          />
+          <TextField
+            variant="outlined"
+            label="Username"
+            className="TextBox"
+            error={formState.errors.username?.message !== undefined}
+            helperText={formState.errors.username?.message}
+            {...register("username", UserModel.usernameValidation)}
+          />
+          <TextField
+            variant="outlined"
+            label="Password"
+            type="password"
+            className="TextBox"
+            error={formState.errors.password?.message !== undefined}
+            helperText={formState.errors.password?.message}
+            {...register("password", UserModel.passwordValidation)}
+          />
 
-        <ButtonGroup variant="contained" fullWidth className="Buttons">
-          <Button color="primary" type="submit" startIcon={<Send />} disabled={Object.values(formState.dirtyFields).length < 4}>Register</Button>
-          <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
-        </ButtonGroup>
+          <ButtonGroup variant="contained" fullWidth className="Buttons">
+            <Button color="primary" type="submit" startIcon={<Send className="MobileMode" />} disabled={Object.values(formState.dirtyFields).length < 4}>Submit</Button>
+            <Button color="secondary" type="reset" startIcon={<Clear className="MobileMode" />}>Clear</Button>
+          </ButtonGroup>
+
+        </div>
 
       </form>
 

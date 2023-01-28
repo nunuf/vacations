@@ -1,13 +1,10 @@
-.Register > form {
-  margin: 30px;
-}
-
 .Register .Buttons {
   margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .Register > a {
   position: relative;
-  bottom: 20px;
+  bottom: 15px;
   z-index: 5;
 }

@@ -19,13 +19,21 @@ a {
 }
 
 form {
-  width: 20vw;
-  margin: 0 30px 10px 30px;
+  width: 100%;
 }
 
- form > .TextBox {
-  width: 100%;
-  margin: 5px 0;
+form > .Container {
+  padding: 0 20px 10px 20px;
+}
+
+form > .Container .TextBox {
+ width: 100%;
+ margin: 5px 0;
+}
+
+.Dialog {
+  width: 97vw;
+  max-width: 400px;
 }
 
 .Box {
@@ -72,4 +80,10 @@ form {
   position: relative;
   background-image: linear-gradient(45deg, red, indigo, violet);
   z-index: 5;
+}
+
+@media screen and (max-width: 400px) {
+  .MobileMode {
+    display: none !important;
+  }
 }

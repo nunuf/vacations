@@ -26,19 +26,23 @@ const Login: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="Login Box">
+    <div className="Login Dialog Box">
+      
+      <h2>Login</h2>
 
       <form onSubmit={handleSubmit(send)}>
 
-        <h2>Login</h2>
+        <div className="Container">
 
-        <TextField label="Username" variant="outlined" className="TextBox" {...register("username")} />
-        <TextField label="Password" variant="outlined" type="password" className="TextBox" {...register("password")} />
+          <TextField label="Username" variant="outlined" className="TextBox" {...register("username")} />
+          <TextField label="Password" variant="outlined" type="password" className="TextBox" {...register("password")} />
 
-        <ButtonGroup variant="contained" fullWidth className="Buttons">
-          <Button color="primary" type="submit" startIcon={<Send />} disabled={!formState.dirtyFields.username || !formState.dirtyFields.password}>Send</Button>
-          <Button color="secondary" type="reset" startIcon={<Clear />}>Clear</Button>
-        </ButtonGroup>
+          <ButtonGroup variant="contained" fullWidth className="Buttons">
+            <Button color="primary" type="submit" startIcon={<Send className="MobileMode" />} disabled={!formState.dirtyFields.username || !formState.dirtyFields.password}>Send</Button>
+            <Button color="secondary" type="reset" startIcon={<Clear className="MobileMode" />}>Clear</Button>
+          </ButtonGroup>
+
+        </div>
 
       </form>
       

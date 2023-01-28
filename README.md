@@ -10,11 +10,13 @@ This project is a vacations management system using React, NodeJs, TypeScript an
 - DoS (Denial of Service) attack defense
 - Sanitize tags from request body
 - SQL injection defense
-- Hashed passwords
+- Hashed passwords (HMAC with salt)
 - Cors
 - Redux
 - Routing
-- Layout
+- Responsive Design
+- Frontend Layout Component
+- Backend project structure
 - Backend and Frontend debugger configuration for VSCode
 
 ## Install
@@ -43,4 +45,5 @@ npm start
 
 ## Open
 Open in browser: [http://localhost:3000](http://localhost:3000)  
-Or click here to open it from DigitalOcean: [magic-trip](http://143.198.8.56)
+  
+Click here to open app from DigitalOcean: [magic-trip](http://143.198.8.56)

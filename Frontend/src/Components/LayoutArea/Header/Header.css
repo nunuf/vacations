@@ -196,6 +196,10 @@
   .Header > h1 {
     top: -62px
   }
+
+  .Dialog {
+    margin-top: 15px !important;
+  }
 }
 
 @media screen and (max-width: 600px) {

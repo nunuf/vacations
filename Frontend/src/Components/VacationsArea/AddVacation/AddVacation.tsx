@@ -79,7 +79,7 @@ const AddVacation: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="AddVacation Box">
+    <div className="AddVacation Dialog Box">
 
       <NavLink to="/vacations" className="Close"><Close /></NavLink>
 
@@ -87,79 +87,83 @@ const AddVacation: React.FC = (): JSX.Element => {
 
       <form onSubmit={handleSubmit(send)}>
 
-        <TextField
-          variant="outlined"
-          label="Destination"
-          className="TextBox"
-          error={formState.errors.destination?.message !== undefined}
-          helperText={formState.errors.destination?.message}
-          {...register("destination", VacationModel.destinationValidation)}
-        />
-        <TextField
-          variant="outlined"
-          label="Description"
-          className="TextBox"
-          error={formState.errors.description?.message !== undefined}
-          helperText={formState.errors.description?.message}
-          {...register("description", VacationModel.descriptionValidation)}
-        />
-        <TextField
-          type="date"
-          variant="outlined"
-          label="Start Date"
-          InputLabelProps={{ shrink: true }}
-          className="TextBox"
-          InputProps={{ inputProps: { min: `${Utils.format(Utils.getDate(new Date()))}` } }}
-          value={startDate.value}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => setStartDate({ value: event.target.value, isDirty: true })}
-          onBlur={() => setStartDate({ ...startDate, isDirty: true })}
-        />
-        {startDate.isDirty === true && !startDate.value && <div className='DateError'>Missing start date</div>}
-        {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>Start date should be before end date</div>}
-        <TextField
-          type="date"
-          variant="outlined"
-          label="End Date"
-          InputLabelProps={{ shrink: true }}
-          className="TextBox"
-          InputProps={{
-            inputProps: {
-              min: `${
-                startDate.value ?
-                Utils.format(Utils.getDate(startDate.value)) :
-                Utils.format(Utils.getDate(new Date()))
-              }`
-            }
-          }}
-          value={endDate.value}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => setEndDate({ value: event.target.value, isDirty: true })}
-          onBlur={() => setEndDate({ ...endDate, isDirty: true })}
-        />
-        {endDate.isDirty === true && !endDate.value && <div className='DateError'>Missing end date</div>}
-        {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>End date should be after start date</div>}
-        <TextField
-          type="number"
-          variant="outlined"
-          label="Price"
-          className="TextBox"
-          InputProps={{ inputProps: { step: 0.01 } }}
-          error={formState.errors.price?.message !== undefined}
-          helperText={formState.errors.price?.message}
-          {...register("price", VacationModel.priceValidation)}
-        />
-        <div className="Preview">
-          <IconButton color="secondary" aria-label="upload picture" component="label">
-            <input hidden type="file" accept="image/*" onChangeCapture={onSelectFile} {...register("image", VacationModel.imageValidation)} />
-            <PhotoCamera />
-          </IconButton>
-          <img src={preview} width="80" height="75" alt='' />{/* preview for uploaded image */}
-        </div>
-        <div>{formState.errors.image?.message}</div>
+        <div className="Container">
 
-        <ButtonGroup variant="contained" fullWidth>
-          <Button color="primary" type="submit" startIcon={<Send />} disabled={!formState.errors || !startDate.value || !endDate.value}>Add</Button>
-          <Button color="secondary" type="reset" startIcon={<Clear />} onClick={clear}>Clear</Button>
-        </ButtonGroup>
+          <TextField
+            variant="outlined"
+            label="Destination"
+            className="TextBox"
+            error={formState.errors.destination?.message !== undefined}
+            helperText={formState.errors.destination?.message}
+            {...register("destination", VacationModel.destinationValidation)}
+          />
+          <TextField
+            variant="outlined"
+            label="Description"
+            className="TextBox"
+            error={formState.errors.description?.message !== undefined}
+            helperText={formState.errors.description?.message}
+            {...register("description", VacationModel.descriptionValidation)}
+          />
+          <TextField
+            type="date"
+            variant="outlined"
+            label="Start"
+            InputLabelProps={{ shrink: true }}
+            className="TextBox Date"
+            InputProps={{ inputProps: { min: `${Utils.format(Utils.getDate(new Date()))}` } }}
+            value={startDate.value}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => setStartDate({ value: event.target.value, isDirty: true })}
+            onBlur={() => setStartDate({ ...startDate, isDirty: true })}
+          />
+          {startDate.isDirty === true && !startDate.value && <div className='DateError'>Missing start date</div>}
+          {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>Start date should be before end date</div>}
+          <TextField
+            type="date"
+            variant="outlined"
+            label="End"
+            InputLabelProps={{ shrink: true }}
+            className="TextBox Date"
+            InputProps={{
+              inputProps: {
+                min: `${
+                  startDate.value ?
+                  Utils.format(Utils.getDate(startDate.value)) :
+                  Utils.format(Utils.getDate(new Date()))
+                }`
+              }
+            }}
+            value={endDate.value}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => setEndDate({ value: event.target.value, isDirty: true })}
+            onBlur={() => setEndDate({ ...endDate, isDirty: true })}
+          />
+          {endDate.isDirty === true && !endDate.value && <div className='DateError'>Missing end date</div>}
+          {startDate.value && endDate.value && endDate.value < startDate.value && <div className='DateError'>End date should be after start date</div>}
+          <TextField
+            type="number"
+            variant="outlined"
+            label="Price"
+            className="TextBox"
+            InputProps={{ inputProps: { step: 0.01 } }}
+            error={formState.errors.price?.message !== undefined}
+            helperText={formState.errors.price?.message}
+            {...register("price", VacationModel.priceValidation)}
+          />
+          <div className="Preview">
+            <IconButton color="secondary" aria-label="upload picture" component="label">
+              <input hidden type="file" accept="image/*" onChangeCapture={onSelectFile} {...register("image", VacationModel.imageValidation)} />
+              <PhotoCamera />
+            </IconButton>
+            <img src={preview} width="80" height="75" alt='' />{/* preview for uploaded image */}
+          </div>
+          <div>{formState.errors.image?.message}</div>
+
+          <ButtonGroup variant="contained" fullWidth>
+            <Button color="primary" type="submit" startIcon={<Send className="MobileMode" />} disabled={!formState.errors || !startDate.value || !endDate.value}>Add</Button>
+            <Button color="secondary" type="reset" startIcon={<Clear className="MobileMode" />} onClick={clear}>Clear</Button>
+          </ButtonGroup>
+
+        </div>
 
       </form>
 
