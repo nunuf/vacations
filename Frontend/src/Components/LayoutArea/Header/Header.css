@@ -56,11 +56,13 @@
 .Header > img:nth-child(4) {
   max-width: 22vh;
   animation: animateCloud 50s linear infinite;
+  animation-delay: -2s;
 }
 
 .Header > img:nth-child(5) {
   max-width: 14vh;
   animation: animateCloud 45s linear infinite;
+  animation-delay: -2s;
 }
 
 .Header > img:nth-child(6) {
@@ -148,10 +150,10 @@
 @media screen and (min-width: 801px) {
   @keyframes animateCloud {
     0% {
-      transform: translateX(-10%);
+      transform: translateX(-5vw);
     }
     100% {
-      transform: translateX(2000%) scale(2);
+      transform: translateX(100vw) scale(2);
     }
   }
 }
@@ -162,17 +164,37 @@
     height: 10vw;
   }
 
+  .Header > img:nth-child(4) {
+    max-width: 16vh;
+    animation: animateCloud 20s linear infinite;
+    animation-delay: -2s;
+  }
+
+  .Header > img:nth-child(5) {
+    max-width: 2vh;
+    animation: animateCloud 10s linear infinite;
+    animation-delay: -2s;
+  }
+
   .Header > img:nth-child(6) {
     max-width: 8vh;
-    animation: animateCloud 3s linear infinite;
+    animation: animateCloud 11s linear infinite;
     z-index: 0;
   }
   
   .Header > img:nth-child(7) {
     top: 5vh;
     max-width: 3vh;
-    animation: animateCloud 20s linear infinite;
+    animation: animateCloud 18s linear infinite;
     animation-delay: -8s;
+  }
+
+  .Header > img:nth-child(8) {
+    top: 6vh;
+    max-width: 12vh;
+    animation: animateCloud 16s linear infinite;
+    animation-delay: -2s;
+    z-index: 0;
   }
   
   .Header > img:nth-child(9) {
@@ -184,15 +206,15 @@
 
   @keyframes animateCloud {
     0% {
-      transform: translateX(-10%);
+      transform: translateX(0vw);
     }
     100% {
-      transform: translateX(300%) scale(2);
+      transform: translateX(100vw) scale(2);
     }
   }
 }
 
-@media screen and (max-width: 644px) {
+@media screen and (max-width: 674px) {
   .Header > h1 {
     top: -62px
   }

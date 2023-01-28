@@ -1,6 +1,13 @@
 .AuthMenu {
   position: absolute;
-  right: 20px;
   top: 20px;
+  right: 20px;
   z-index: 5;
+}
+
+@media screen and (max-width: 800px) {
+  .AuthMenu {
+    top: 0;
+    right: 5px;
+  }
 }

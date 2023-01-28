@@ -28,6 +28,7 @@ FROM nginx:1.12-alpine AS production-stage
 # Copy build files
 COPY --from=build-stage /tmp/build /usr/share/nginx/html
 
+# Fix nginx default.conf for client side routing on DigitalOcean gives a 404 page on refresh (F5)
 RUN sed -i '/index  index.html index.htm;/a \        proxy_intercept_errors on;\n        error_page 404 = /index.html;'  /etc/nginx/conf.d/default.conf
 
 # Run index.html inside nginx
